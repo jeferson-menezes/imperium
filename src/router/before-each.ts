@@ -3,7 +3,6 @@ import { NavigationGuardNext, RouteLocationNormalized } from "vue-router";
 
 export default async (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
 
-    console.log('res');
     
     try {
         const authStore = useAuthStore();

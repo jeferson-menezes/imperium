@@ -1,3 +1,4 @@
+import { setBearerToken } from "@/http"
 import { Usuario } from "./Sessao"
 
 export const StorageTypes = {
@@ -5,6 +6,8 @@ export const StorageTypes = {
     USER: 'user'
 }
 
+
+export const setHeaderToken = (token: string) => setBearerToken(token)
 export const setLocalToken = (token: string) => localStorage.setItem(StorageTypes.TOKEN, token)
 export const setLocalUsuario = (usuario: Usuario) => localStorage.setItem(StorageTypes.USER, JSON.stringify(usuario))
 

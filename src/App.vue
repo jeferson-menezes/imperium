@@ -25,7 +25,7 @@
       <v-spacer></v-spacer>
     </v-app-bar>
 
-    <v-main style="background: #fafafa">
+    <v-main>
       <v-container>
         <router-view></router-view>
       </v-container>

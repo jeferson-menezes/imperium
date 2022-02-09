@@ -2,7 +2,7 @@ import http from "@/http";
 import { defineStore } from "pinia";
 import { LoginForm } from "../LoginForm";
 import { Sessao, Usuario } from "../Sessao";
-import { deleteLocalToken, deleteLocalUsuario, getLocalToken, getLocalUsuario, setLocalToken, setLocalUsuario } from "../storage";
+import { deleteLocalToken, deleteLocalUsuario, getLocalToken, getLocalUsuario, setHeaderToken, setLocalToken, setLocalUsuario } from "../storage";
 
 export const useAuthStore = defineStore({
 
@@ -11,7 +11,7 @@ export const useAuthStore = defineStore({
     state: () => ({
         token: undefined as string | undefined,
         usuario: undefined as Usuario | undefined
-    } as Sessao),
+    }),
 
     getters: {
         hasToken: (state) => !!state.token
@@ -31,8 +31,11 @@ export const useAuthStore = defineStore({
             const { token, usuario } = sessao
             this.token = token as string
             this.usuario = usuario as Usuario
+            console.log('Salvando o token');
+            
             setLocalToken(this.token)
             setLocalUsuario(this.usuario)
+            setHeaderToken(this.token)
         },
 
         actionChecaToken() {
@@ -52,6 +55,8 @@ export const useAuthStore = defineStore({
             const usuario = getLocalUsuario()
 
             this.usuario = usuario
+            
+            return this.actionValidaToken(token)
         },
 
         async actionValidaToken(token: string): Promise<string> {
