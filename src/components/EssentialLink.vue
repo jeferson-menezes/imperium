@@ -1,5 +1,5 @@
 <template>
-    <q-item clickable tag="a" target="_blank" :to="{ name: routerName }">
+    <q-item clickable tag="a" :to="{ name: routerName }">
         <q-item-section v-if="icon" avatar>
             <q-icon :name="icon" />
         </q-item-section>
@@ -29,7 +29,7 @@ export default defineComponent({
 
         routerName: {
             type: String,
-            default: "me",
+            default: "home",
         },
 
         icon: {

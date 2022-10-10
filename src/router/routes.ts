@@ -20,8 +20,14 @@ const routes: RouteRecordRaw[] = [
                 path: "home",
                 name: "home",
                 component: () => import("pages/home/HomePage.vue")
+            },
+            {
+                path: "contas",
+                name: "contas",
+                component: () => import("pages/conta/ContaPage.vue")
             }
-        ]
+        ],
+        meta: { requiresAuth: true }
     },
 
     // Always leave this as last one,

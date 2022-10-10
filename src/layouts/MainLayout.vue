@@ -41,10 +41,10 @@ import EssentialLink from "components/EssentialLink.vue";
 
 const linksList = [
     {
-        title: "Docs",
+        title: "Contas",
         caption: "quasar.dev",
         icon: "school",
-        routerName: "home",
+        routerName: "contas",
     },
 ];
 

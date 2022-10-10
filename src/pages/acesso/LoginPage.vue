@@ -1,8 +1,10 @@
 
 <script lang="ts">
-import { defineComponent, ref } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import { useAuthStore } from "src/stores/auth-store";
 import { email, required } from "src/model/rules";
+import useNotify from "../composable/useNotify";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
     name: "LoginPage",
@@ -15,11 +17,24 @@ export default defineComponent({
         };
 
         const authStore = useAuthStore();
+        const { notifyError } = useNotify();
+        const router = useRouter();
 
         const login = async () => {
-            const res = await authStore.logar(form.value);
-            console.log(res);
+            try {
+                await authStore.logar(form.value);
+                router.push({ name: "home" });
+            } catch (err) {
+                notifyError("Houve um erro para realizar a operação");
+            }
         };
+
+        onMounted(() => {
+            if (authStore.isLoggedIn) {
+                console.log("Onde");
+                router.push({ name: "home" });
+            }
+        });
 
         return { form, rules, login };
     },
