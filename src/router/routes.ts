@@ -24,7 +24,12 @@ const routes: RouteRecordRaw[] = [
             {
                 path: "contas",
                 name: "contas",
-                component: () => import("pages/conta/ContaPage.vue")
+                component: () => import("pages/conta/ContasPage.vue")
+            },
+            {
+                path: "conta/form/:id?",
+                name: "conta-form",
+                component: () => import("pages/conta/ContaFormPage.vue")
             }
         ],
         meta: { requiresAuth: true }

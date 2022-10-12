@@ -123,7 +123,7 @@ import { useContaStore } from "src/stores/conta-store";
 import { columnsConta } from "src/model/columns";
 
 export default defineComponent({
-    name: "ContaPage",
+    name: "ContasPage",
 
     setup() {
         const loading = ref(false);
