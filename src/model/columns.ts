@@ -52,4 +52,49 @@ const columnsConta: QTableColumn[] = [
     }
 ];
 
-export { columnsConta };
+const columnsCategoria: QTableColumn[] = [
+    {
+        label: "",
+        name: "icone",
+        align: "left",
+        field: "icone",
+        sortable: false
+    },
+    {
+        label: "Nome",
+        name: "nome",
+        align: "left",
+        field: "nome",
+        sortable: true
+    },
+    {
+        label: "Descrição",
+        name: "descricao",
+        align: "left",
+        field: "descricao",
+        sortable: true
+    },
+    {
+        label: "Natureza",
+        name: "natureza",
+        align: "left",
+        field: "natureza",
+        sortable: true
+    },
+    {
+        label: "Ativa",
+        name: "ativo",
+        align: "left",
+        field: "ativo",
+        sortable: true
+    },
+    {
+        label: "Ações",
+        name: "acoes",
+        align: "center",
+        field: "acoes",
+        sortable: false
+    }
+];
+
+export { columnsConta, columnsCategoria };

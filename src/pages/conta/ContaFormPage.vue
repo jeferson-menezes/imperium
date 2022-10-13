@@ -7,46 +7,17 @@
                 </p>
             </div>
 
-            <q-form
-                class="col-md-6 col-sm-10 col-xs-11 q-gutter-y-md"
-                ref="formRef"
-                @submit.prevent="submit"
-            >
-                <q-input
-                    label="Saldo"
-                    v-model="form.saldo"
-                    prefix="R$"
-                    mask="#,##"
-                    fill-mask="0"
-                    lazy-rules
-                    reverse-fill-mask
-                    :rules="rules.saldo"
-                ></q-input>
+            <q-form class="col-md-6 col-sm-10 col-xs-11 q-gutter-y-md" ref="formRef" @submit.prevent="submit">
+                <q-input label="Saldo" v-model="form.saldo" prefix="R$" mask="#,##" fill-mask="0" lazy-rules
+                    reverse-fill-mask :rules="rules.saldo"></q-input>
 
-                <q-input
-                    label="Nome"
-                    v-model="form.nome"
-                    lazy-rules
-                    :rules="rules.nome"
-                ></q-input>
+                <q-input label="Nome" v-model="form.nome" lazy-rules :rules="rules.nome"></q-input>
 
-                <q-input
-                    label="Descrição"
-                    v-model="form.descricao"
-                    lazy-rules
-                    :rules="rules.descricao"
-                ></q-input>
+                <q-input label="Descrição" v-model="form.descricao" lazy-rules :rules="rules.descricao"></q-input>
 
-                <q-select
-                    map-options
-                    emit-value
-                    option-value="id"
-                    option-label="nome"
-                    v-model="form.tipoContaId"
-                    :options="tipoContaStore.tipos"
-                    :rules="[(v) => v || 'Tipo de conta é obrigatório']"
-                    label="Tipo de Conta"
-                >
+                <q-select map-options emit-value option-value="id" option-label="nome" v-model="form.tipoContaId"
+                    :options="tipoContaStore.tipos" :rules="[(v) => v || 'Tipo de conta é obrigatório']"
+                    label="Tipo de Conta">
                     <template v-slot:option="scope">
                         <q-item v-bind="scope.itemProps">
                             <q-item-section avatar>
@@ -54,43 +25,25 @@
                             </q-item-section>
                             <q-item-section>
                                 <q-item-label>{{
-                                    scope.opt.nome
+                                scope.opt.nome
                                 }}</q-item-label>
                                 <q-item-label caption>{{
-                                    scope.opt.descricao
+                                scope.opt.descricao
                                 }}</q-item-label>
                             </q-item-section>
                         </q-item>
                     </template>
                 </q-select>
 
-                <q-checkbox
-                    left-label
-                    v-model="form.incluiSoma"
-                    label="Incluir na soma"
-                />
+                <q-checkbox left-label v-model="form.incluiSoma" label="Incluir na soma" />
 
                 <q-checkbox left-label v-model="form.ativo" label="Ativo" />
 
-                <q-btn
-                    :label="isUpdate ? 'Atualizar' : 'Cadastrar'"
-                    :loading="loading"
-                    color="primary"
-                    class="full-width"
-                    type="submit"
-                    outline
-                    rounded
-                ></q-btn>
+                <q-btn :label="isUpdate ? 'Atualizar' : 'Cadastrar'" :loading="loading" color="primary"
+                    class="full-width" type="submit" outline rounded></q-btn>
 
-                <q-btn
-                    label="Cancelar"
-                    class="full-width"
-                    color="primary"
-                    type="button"
-                    rounded
-                    flat
-                    :to="{ name: 'contas' }"
-                />
+                <q-btn label="Cancelar" class="full-width" color="primary" type="button" rounded flat
+                    :to="{ name: 'contas' }" />
             </q-form>
         </div>
     </q-page>
@@ -104,6 +57,7 @@ import { useContaStore } from "src/stores/conta-store";
 import { useTipoContaStore } from "src/stores/tipo-conta-store";
 import { Conta } from "src/model/conta";
 import { toReal } from "src/model/currency-helper";
+import { ErrorResponse } from "src/model/error";
 
 export default defineComponent({
     name: "ContaFormPage",
@@ -120,6 +74,7 @@ export default defineComponent({
             nome: [required("O Nome é obrigatório")],
             descricao: [required("A descrição é obrigatória")],
         };
+
         const form = ref<Conta>({
             id: 0,
             ativo: true,
@@ -129,6 +84,7 @@ export default defineComponent({
             saldo: "",
             tipoContaId: undefined,
         });
+
         const { notifySuccess, notifyError } = useNotify();
 
         const isUpdate = computed(() => route.params.id);
@@ -139,18 +95,16 @@ export default defineComponent({
                 const conta = form.value;
                 conta.saldo = conta.saldo.toString().replace(",", ".");
 
-                console.log(conta);
                 if (isUpdate.value) {
                     await contaStore.atualizar(conta.id, conta);
                 } else {
                     await contaStore.adicionar(conta);
                 }
-                notifySuccess(
-                    isUpdate.value ? "Atualizado" : "Cadastrado" + "com sucesso"
-                );
+                notifySuccess(isUpdate.value ? "Atualizado" : "Cadastrado" + "com sucesso");
                 router.push({ name: "contas" });
-            } catch (error: any) {
-                notifyError(error?.message);
+            } catch (error) {
+                const err = error as ErrorResponse
+                notifyError(err.message);
             } finally {
                 loading.value = false;
             }
