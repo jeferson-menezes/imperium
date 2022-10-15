@@ -48,6 +48,7 @@
         </div>
     </q-page>
 </template>
+
 <script lang="ts">
 import { defineComponent, ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";

@@ -17,6 +17,11 @@
                 <q-input label="Descrição" v-model="form.descricao" lazy-rules :rules="rules.descricao"></q-input>
 
                 <ColorsPicker v-model="form.cor" />
+
+                <IconsPicker v-model="form.icone" />
+
+                <q-checkbox left-label v-model="form.ativo" label="Ativo" />
+
                 <q-btn :label="isUpdate ? 'Atualizar' : 'Cadastrar'" :loading="loading" color="primary"
                     class="full-width" type="submit" outline rounded></q-btn>
 
@@ -28,17 +33,23 @@
 </template>
 
 <script lang="ts">
-import { log } from 'console';
 import { Categoria, Natureza } from 'src/model/categoria'
-import { computed, defineComponent, ref } from 'vue'
+import { ErrorResponse } from 'src/model/error';
+import { required } from 'src/model/rules';
+import { useCategoriaStore } from 'src/stores/categoria-store';
+import { computed, defineComponent, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
+import useNotify from '../composable/useNotify';
 import ColorsPicker from "./ColorsPicker.vue";
+import IconsPicker from './IconsPicker.vue'
 
 export default defineComponent({
     components: {
-        ColorsPicker
+        ColorsPicker,
+        IconsPicker
     },
     setup() {
+        const categoriaStore = useCategoriaStore()
         const route = useRoute();
         const router = useRouter();
         const loading = ref(false);
@@ -46,10 +57,9 @@ export default defineComponent({
 
         const rules = {
             cor: [],
-            icone: [],
-            natureza: [],
-            descricao: [],
-            nome: [],
+            natureza: [required("A natureza é obrigatória")],
+            descricao: [required("A descrição é obrigatória")],
+            nome: [required("O nome é obrigatório")],
         }
 
         const form = ref<Categoria>({
@@ -61,10 +71,35 @@ export default defineComponent({
             descricao: "",
             nome: "",
         })
-        const submit = async () => {
-            console.log(form.value);
-        }
+
+        const { notifySuccess, notifyError } = useNotify();
         const isUpdate = computed(() => route.params.id);
+
+        const submit = async () => {
+            try {
+                loading.value = true
+                if (isUpdate.value) {
+                    await categoriaStore.atualizar(form.value.id, form.value)
+                } else {
+                    await categoriaStore.adicionar(form.value)
+                }
+
+                notifySuccess(isUpdate.value ? "Atualizado" : "Cadastrado" + "com sucesso");
+                router.push({ name: "categorias" });
+            } catch (error) {
+                const err = error as ErrorResponse
+                notifyError(err.message);
+            } finally {
+                loading.value = false
+            }
+        }
+
+        onMounted(async () => {
+            if (isUpdate.value) {
+                form.value = await categoriaStore.detalhar(isUpdate.value as string)
+            }
+        })
+
         return { rules, form, loading, formRef, submit, isUpdate }
     },
 })

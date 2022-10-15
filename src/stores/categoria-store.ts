@@ -8,10 +8,19 @@ export const useCategoriaStore = defineStore("categoria", {
     }),
     getters: {},
     actions: {
+        adicionar(categoria: Categoria) {
+            return api.post<Categoria>("categorias", categoria);
+        },
+        atualizar(id: number, categoria: Categoria) {
+            return api.put<Categoria>(`categorias/${id}`, categoria);
+        },
         listar() {
             return api
                 .get<Categoria[]>("categorias")
                 .then(res => (this.categorias = res.data));
+        },
+        detalhar(id: number | string) {
+            return api.get<Categoria>(`categorias/${id}`).then(res => res.data);
         }
     }
 });
