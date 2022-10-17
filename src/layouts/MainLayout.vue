@@ -32,20 +32,26 @@ const linksList = [
     {
         title: "Contas",
         caption: "quasar.dev",
-        icon: "school",
+        icon: "mdi-bank",
         routerName: "contas",
     },
     {
         title: "Categorias",
         caption: "quasar.dev",
-        icon: "school",
+        icon: "mdi-shape",
         routerName: "categorias",
     },
     {
         title: "Despesas",
         caption: "quasar.dev",
-        icon: "home",
+        icon: "mdi-cart",
         routerName: "despesas",
+    },
+    {
+        title: "Receitas",
+        caption: "quasar.dev",
+        icon: "payments",
+        routerName: "receitas",
     },
 ];
 

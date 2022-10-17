@@ -16,6 +16,7 @@ export const toReal = (value: string | number | currency) =>
 export const toRealSymbol = (value: string | number | currency) =>
     currency.default(value).format({
         decimal: ",",
+        separator: "",
         symbol: "R$ "
     });
 

@@ -1,4 +1,4 @@
-export interface Despesa {
+export interface Receita {
     id: number;
     descricao: string;
     data: string;

@@ -1,5 +1,5 @@
 import { Despesa } from "./../model/despesa";
-import { Page } from "./../model/paginacao";
+import { Page, Pageable } from "./../model/paginacao";
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
 
@@ -20,9 +20,10 @@ export const useDespesaStore = defineStore("despesa", {
         detalhar(id: string | number) {
             return api.get<Despesa>(`despesas/${id}`).then(res => res.data);
         },
-        listarPage() {
+
+        listarPage(params?: Pageable) {
             return api
-                .get("despesas/page")
+                .get("despesas/page", { params })
                 .then(res => (this.despesasPage = res.data));
         }
     }

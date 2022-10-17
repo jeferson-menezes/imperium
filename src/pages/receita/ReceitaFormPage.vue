@@ -3,7 +3,7 @@
         <div class="row justify-center">
             <div class="col-12 text-center">
                 <p class="text-h6">
-                    {{ isUpdate ? "Atualizar" : "Cadastrar" }} despesa
+                    {{ isUpdate ? "Atualizar" : "Cadastrar" }} receita
                 </p>
             </div>
 
@@ -14,7 +14,7 @@
                 <q-input label="Descrição" v-model="form.descricao" lazy-rules :rules="rules.descricao"></q-input>
 
                 <q-select map-options emit-value option-value="id" option-label="nome" v-model="form.categoriaId"
-                    :options="categoriaStore.filtrarPorNatureza('DESPESA')" :rules="rules.categoriaId"
+                    :options="categoriaStore.filtrarPorNatureza('RECEITA')" :rules="rules.categoriaId"
                     label="Categoria">
                     <template v-slot:option="scope">
                         <q-item v-bind="scope.itemProps">
@@ -65,7 +65,7 @@
                     class="full-width" type="submit" outline rounded></q-btn>
 
                 <q-btn label="Cancelar" class="full-width" color="primary" type="button" rounded flat
-                    :to="{ name: 'despesas' }" />
+                    :to="{ name: 'receitas' }" />
 
             </q-form>
         </div>
@@ -73,11 +73,9 @@
 </template>
 
 <script lang="ts">
-import { Despesa } from 'src/model/despesa';
 import { ErrorResponse } from 'src/model/error';
 import { useCategoriaStore } from 'src/stores/categoria-store';
 import { useContaStore } from 'src/stores/conta-store';
-import { useDespesaStore } from 'src/stores/despesa-store';
 import { computed, defineComponent, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
 import useNotify from '../composable/useNotify';
@@ -85,9 +83,11 @@ import DatePicker from 'src/components/DatePicker.vue'
 import TimePicker from 'src/components/TimePicker.vue'
 import MoneyField from 'src/components/MoneyField.vue'
 import { required } from 'src/model/rules';
+import { Receita } from 'src/model/receita';
+import { useReceitaStore } from 'src/stores/receita-store';
 
 export default defineComponent({
-    name: 'DespesaFormPage',
+    name: 'ReceitaFormPage',
     components: {
         DatePicker,
         TimePicker,
@@ -99,7 +99,7 @@ export default defineComponent({
         const loading = ref(false);
         const formRef = ref(null);
         const { notifySuccess, notifyError } = useNotify();
-        const despesaStore = useDespesaStore()
+        const receitaStore = useReceitaStore()
         const contaStore = useContaStore()
         const categoriaStore = useCategoriaStore()
 
@@ -109,7 +109,7 @@ export default defineComponent({
             contaId: [required('A conta é obrigatória')]
         }
 
-        const form = ref<Despesa>({
+        const form = ref<Receita>({
             id: 0,
             descricao: "",
             data: "2021-10-15",
@@ -125,12 +125,12 @@ export default defineComponent({
             try {
                 loading.value = true
                 if (isUpdate.value) {
-                    await despesaStore.atualizar(form.value.id, form.value)
+                    await receitaStore.atualizar(form.value.id, form.value)
                 } else {
-                    await despesaStore.adicionar(form.value)
+                    await receitaStore.adicionar(form.value)
                 }
                 notifySuccess(isUpdate.value ? "Atualizado" : "Cadastrado" + "com sucesso");
-                router.push({ name: "despesas" });
+                router.push({ name: "receitas" });
             } catch (error) {
                 const err = error as ErrorResponse
                 notifyError(err.message);
@@ -143,7 +143,7 @@ export default defineComponent({
             contaStore.listar()
             categoriaStore.listar()
             if (isUpdate.value) {
-                form.value = await despesaStore.detalhar(isUpdate.value as string)
+                form.value = await receitaStore.detalhar(isUpdate.value as string)
             }
         })
 

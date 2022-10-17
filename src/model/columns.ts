@@ -141,10 +141,55 @@ const columnsDespesa: QTableColumn[] = [
         sortable: true
     },
     {
-        label: "Pago",
-        name: "concluida",
+        label: "Ações",
+        name: "acoes",
+        align: "center",
+        field: "acoes",
+        sortable: false
+    }
+];
+
+const columnsReceita: QTableColumn[] = [
+    {
+        label: "Descrição",
+        name: "descricao",
         align: "left",
-        field: "concluida",
+        field: "descricao",
+        sortable: true
+    },
+    {
+        label: "Valor",
+        name: "valor",
+        align: "left",
+        field: "valor",
+        sortable: true
+    },
+    {
+        label: "Data",
+        name: "data",
+        align: "left",
+        field: "data",
+        sortable: true
+    },
+    {
+        label: "Categoria",
+        name: "categoriaNome",
+        align: "left",
+        field: "categoriaNome",
+        sortable: true
+    },
+    {
+        label: "Hora",
+        name: "hora",
+        align: "left",
+        field: "hora",
+        sortable: true
+    },
+    {
+        label: "Conta",
+        name: "contaNome",
+        align: "left",
+        field: "contaNome",
         sortable: true
     },
     {
@@ -156,4 +201,4 @@ const columnsDespesa: QTableColumn[] = [
     }
 ];
 
-export { columnsConta, columnsCategoria, columnsDespesa };
+export { columnsConta, columnsCategoria, columnsDespesa, columnsReceita };

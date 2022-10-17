@@ -4,11 +4,10 @@ export enum Direction {
 }
 
 export interface Pageable {
-    value: number;
-    size: number;
+    value?: number;
+    size?: number;
     page: number;
-    sort?: string[];
-    direction: Direction;
+    sort?: string;
 }
 
 export interface Page<T> {
@@ -19,7 +18,6 @@ export interface Page<T> {
     number: number;
     numberOfElements: number;
     size: number;
-    sort: any;
     totalElements: number;
     totalPages: number;
 }
