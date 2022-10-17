@@ -40,6 +40,16 @@ const routes: RouteRecordRaw[] = [
                 path: "categoria/form/:id?",
                 name: "categoria-form",
                 component: () => import("pages/categoria/CategoriaFormPage.vue")
+            },
+            {
+                path: "despesas",
+                name: "despesas",
+                component: () => import("pages/despesa/DespesasPage.vue")
+            },
+            {
+                path: "despesa/form/:id?",
+                name: "despesa-form",
+                component: () => import("pages/despesa/DespesaFormPage.vue")
             }
         ],
         meta: { requiresAuth: true }

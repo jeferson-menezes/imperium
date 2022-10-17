@@ -1,4 +1,6 @@
-export const required = (text: string) => {
+import { ValidationRule } from "quasar";
+
+export const required = (text: string): any => {
     return (v: string) => !!v || text;
 };
 

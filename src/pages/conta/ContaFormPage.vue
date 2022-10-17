@@ -8,8 +8,8 @@
             </div>
 
             <q-form class="col-md-6 col-sm-10 col-xs-11 q-gutter-y-md" ref="formRef" @submit.prevent="submit">
-                <q-input label="Saldo" v-model="form.saldo" prefix="R$" mask="#,##" fill-mask="0" lazy-rules
-                    reverse-fill-mask :rules="rules.saldo"></q-input>
+
+                <MoneyField label="Saldo" v-model="form.saldo" />
 
                 <q-input label="Nome" v-model="form.nome" lazy-rules :rules="rules.nome"></q-input>
 
@@ -57,11 +57,16 @@ import { required } from "src/model/rules";
 import { useContaStore } from "src/stores/conta-store";
 import { useTipoContaStore } from "src/stores/tipo-conta-store";
 import { Conta } from "src/model/conta";
-import { toReal } from "src/model/currency-helper";
 import { ErrorResponse } from "src/model/error";
+import MoneyField from 'src/components/MoneyField.vue'
 
 export default defineComponent({
+
     name: "ContaFormPage",
+
+    components: {
+        MoneyField
+    },
     setup() {
         const tipoContaStore = useTipoContaStore();
         const contaStore = useContaStore();
@@ -82,7 +87,7 @@ export default defineComponent({
             descricao: "",
             incluiSoma: true,
             nome: "",
-            saldo: "",
+            saldo: 0,
             tipoContaId: undefined,
         });
 
@@ -93,13 +98,11 @@ export default defineComponent({
         const submit = async () => {
             try {
                 loading.value = true;
-                const conta = form.value;
-                conta.saldo = conta.saldo.toString().replace(",", ".");
 
                 if (isUpdate.value) {
-                    await contaStore.atualizar(conta.id, conta);
+                    await contaStore.atualizar(form.value.id, form.value);
                 } else {
-                    await contaStore.adicionar(conta);
+                    await contaStore.adicionar(form.value);
                 }
                 notifySuccess(isUpdate.value ? "Atualizado" : "Cadastrado" + "com sucesso");
                 router.push({ name: "contas" });
@@ -114,12 +117,9 @@ export default defineComponent({
         onMounted(async () => {
             tipoContaStore.listar();
             if (isUpdate.value) {
-                const conta = await contaStore.detalhar(
+                form.value = await contaStore.detalhar(
                     isUpdate.value as string
                 );
-                form.value = conta;
-                form.value.saldo = toReal(conta.saldo);
-                form.value.tipoContaId = conta?.tipo?.id;
             }
         });
 

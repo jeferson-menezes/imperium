@@ -1,12 +1,17 @@
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
-import { Categoria } from "src/model/categoria";
+import { Categoria, Natureza } from "src/model/categoria";
 
 export const useCategoriaStore = defineStore("categoria", {
     state: () => ({
         categorias: [] as Categoria[] | []
     }),
-    getters: {},
+    getters: {
+        filtrarPorNatureza(state) {
+            return (natureza: string) =>
+                state.categorias.filter(n => n.natureza === natureza);
+        }
+    },
     actions: {
         adicionar(categoria: Categoria) {
             return api.post<Categoria>("categorias", categoria);

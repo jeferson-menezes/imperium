@@ -41,6 +41,12 @@ const linksList = [
         icon: "school",
         routerName: "categorias",
     },
+    {
+        title: "Despesas",
+        caption: "quasar.dev",
+        icon: "home",
+        routerName: "despesas",
+    },
 ];
 
 export default defineComponent({

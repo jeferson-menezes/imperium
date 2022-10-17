@@ -46,6 +46,11 @@
 
             </q-table>
         </div>
+
+        <q-page-sticky position="bottom-right" :offset="[18, 18]">
+            <q-btn v-if="$q.platform.is.mobile" fab icon="mdi-plus" color="primary" :to="{ name: 'categoria-form' }">
+            </q-btn>
+        </q-page-sticky>
     </q-page>
 </template>
 

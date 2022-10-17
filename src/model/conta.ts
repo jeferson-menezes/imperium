@@ -10,7 +10,6 @@ export interface Conta {
     descricao: string;
     incluiSoma: boolean;
     nome: string;
-    saldo: number | string;
+    saldo: number;
     tipoContaId?: number;
-    tipo?: TipoConta;
 }

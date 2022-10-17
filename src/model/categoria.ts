@@ -7,7 +7,7 @@ export interface Categoria {
     id: number;
     nome: string;
     descricao: string;
-    natureza: Natureza | undefined;
+    natureza: Natureza | undefined | string;
     ativo: boolean;
     icone: string;
     cor: string;
