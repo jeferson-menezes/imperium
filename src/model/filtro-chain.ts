@@ -12,6 +12,7 @@ export abstract class FilterPattern {
     // eslint-disable-next-line no-use-before-define
     proximo: FilterPattern;
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     constructor(proximo: FilterPattern | any) {
         this.proximo = proximo;
     }
@@ -96,6 +97,9 @@ export class FilterVazio extends FilterPattern {
     }
 
     verifica(filter: string): Params {
+        if (filter) {
+            return {};
+        }
         return {};
     }
 }

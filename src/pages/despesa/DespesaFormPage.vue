@@ -112,8 +112,8 @@ export default defineComponent({
         const form = ref<Despesa>({
             id: 0,
             descricao: "",
-            data: "2021-10-15",
-            hora: "",
+            data: new Date().toISOString().substring(0, 10),
+            hora: new Date().toLocaleTimeString().substring(0, 5),
             valor: 0,
             categoriaId: undefined,
             contaId: undefined

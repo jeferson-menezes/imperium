@@ -25,10 +25,7 @@ export default defineComponent({
 
     setup(props, { emit }) {
         const time = computed({
-            get: () => {
-                console.log(props.modelValue);
-                return props.modelValue
-            },
+            get: () => props.modelValue,
             set: (value) => emit('update:modelValue', value)
         })
 

@@ -4,17 +4,80 @@
             <q-table class="col-12" title="Lista de categorias" hide-bottom row-key="id" :rowsPerPage="20"
                 :loading="loading" :columns="columnsReceita" :rows="receitaStore.receitasPage?.content">
 
-                <template v-slot:top-left>
-                    <q-input borderless dense debounce="300" v-model="filter" placeholder="Search">
-                        <template v-slot:append>
-                            <q-icon name="search" />
-                        </template>
-                    </q-input>
-                </template>
+                <template v-slot:top>
+                    <div class="row col-sm-8 col-xs-12 start content-start">
 
-                <template v-slot:top-right>
+                        <div class="col q-mr-xs">
+                            <q-input rounded standout dense debounce="600" v-model="filter" placeholder="Search"
+                                @update:model-value="filterChange">
+                                <template v-slot:append>
+                                    <q-icon name="search" />
+                                </template>
+                            </q-input>
+                        </div>
+                        <div class="col q-mr-xs">
+                            <q-select rounded standout dense @update:model-value="contaChange" map-options emit-value
+                                option-value="id" option-label="nome" v-model="contaId" :options="contaStore.contas"
+                                label="Conta">
+
+                                <template v-slot:append>
+                                    <q-icon v-if="contaId" name="close"
+                                        @click.stop.prevent="(contaId = undefined) ||contaChange(undefined)"
+                                        class="cursor-pointer" />
+                                </template>
+
+                                <template v-slot:option="scope">
+                                    <q-item v-bind="scope.itemProps">
+                                        <q-item-section avatar>
+                                            <q-icon :name="'mdi-' + scope.opt.tipoContaIcone" />
+                                        </q-item-section>
+                                        <q-item-section>
+                                            <q-item-label>
+                                                {{ scope.opt.nome }}
+                                            </q-item-label>
+                                            <q-item-label caption>
+                                                {{ scope.opt.descricao }}
+                                            </q-item-label>
+                                        </q-item-section>
+                                    </q-item>
+                                </template>
+                            </q-select>
+                        </div>
+
+                        <div class="col">
+                            <q-select rounded standout dense @update:model-value="categoriaChange" map-options
+                                emit-value option-value="id" option-label="nome" v-model="categoriaId"
+                                :options="categoriaStore.filtrarPorNatureza('DESPESA')" label="Categoria">
+
+                                <template v-slot:append>
+                                    <q-icon v-if="categoriaId" name="close"
+                                        @click.stop.prevent="(categoriaId = undefined) || categoriaChange(undefined)"
+                                        class="cursor-pointer" />
+                                </template>
+
+                                <template v-slot:option="scope">
+                                    <q-item v-bind="scope.itemProps">
+                                        <q-item-section avatar>
+                                            <q-icon :color="scope.opt.cor" :name="'mdi-' + scope.opt.icone" />
+                                        </q-item-section>
+                                        <q-item-section>
+                                            <q-item-label>
+                                                {{ scope.opt.nome }}
+                                            </q-item-label>
+                                            <q-item-label caption>
+                                                {{ scope.opt.descricao }}
+                                            </q-item-label>
+                                        </q-item-section>
+                                    </q-item>
+                                </template>
+                            </q-select>
+
+                        </div>
+                    </div>
+                    <q-space></q-space>
                     <q-btn v-if="$q.platform.is.desktop" label="novo" icon="mdi-plus" color="primary"
                         :to="{ name: 'receita-form' }" />
+
                 </template>
 
                 <template v-slot:body-cell-valor="props">
@@ -47,7 +110,7 @@
                     <q-tr>
                         <q-td colspan="100%">
                             <div class="q-pa-md flex flex-center">
-                                <q-pagination :to-fn="pageChange" v-model="receitaStore.receitasPage.size"
+                                <q-pagination :to-fn="pageChange" v-model="page"
                                     :max="receitaStore.receitasPage.totalPages" />
                             </div>
                         </q-td>
@@ -66,6 +129,10 @@
 import { columnsReceita } from 'src/model/columns';
 import { toRealSymbol } from 'src/model/currency-helper';
 import { formatDate } from 'src/model/date-helper';
+import { FilterEhAno, FilterEhData, FilterEhMes, FilterEhTexto, FilterEhValor, FilterVazio, Params } from 'src/model/filtro-chain';
+import { Direction } from 'src/model/paginacao';
+import { useCategoriaStore } from 'src/stores/categoria-store';
+import { useContaStore } from 'src/stores/conta-store';
 import { useReceitaStore } from 'src/stores/receita-store';
 import { defineComponent, onMounted, ref } from 'vue'
 
@@ -73,23 +140,73 @@ export default defineComponent({
     name: 'ReceitasPage',
     setup() {
         const loading = ref(false);
-        const filter = ref('')
         const receitaStore = useReceitaStore()
+        const contaStore = useContaStore()
+        const categoriaStore = useCategoriaStore()
+        const filter = ref('')
+        const page = ref(1)
+        const contaId = ref<number | undefined>(undefined)
+        const categoriaId = ref<number | undefined>(undefined)
+        let query: Params = {}
 
-        const pageChange = (e: number) => {
-            console.log(e);
+        const contaChange = (conId: number | undefined) => {
+            contaId.value = conId
+            page.value = 1
+            listar()
         }
 
-        onMounted(() => receitaStore.listarPage({ page: 0, size: 5 }))
+        const categoriaChange = (catId: number | undefined) => {
+            categoriaId.value = catId
+            page.value = 1
+            listar()
+        }
+
+        const filterChange = () => {
+            const pattern = new FilterEhAno(new FilterEhMes(new FilterEhData(new FilterEhValor(new FilterEhTexto(new FilterVazio())))));
+            query = pattern.verifica(filter.value)
+            page.value = 1
+            listar()
+        }
+
+        const listar = () => {
+            loading.value = true
+            receitaStore.listarPage(params())
+                .finally(() => (loading.value = false))
+        }
+
+        const params = () => {
+            return {
+                page: page.value - 1,
+                size: 5,
+                sort: `data,${Direction.DESC}`,
+                categoriaId: categoriaId.value,
+                contaId: contaId.value,
+                ...query
+            }
+        }
+
+        onMounted(() => {
+            contaStore.listar()
+            categoriaStore.listar()
+            listar()
+        })
 
         return {
-            columnsReceita,
-            receitaStore,
             loading,
+            categoriaId,
+            contaId,
+            categoriaChange,
+            contaChange,
+            listar,
+            filterChange,
+            receitaStore,
+            categoriaStore,
+            contaStore,
+            page,
             filter,
-            pageChange,
             toReal: toRealSymbol,
-            formatDate
+            formatDate,
+            columnsReceita,
         }
     },
 })
