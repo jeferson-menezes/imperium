@@ -12,7 +12,6 @@
             <q-card-section>
                 <q-select v-model="paleta" map-options emit-value option-value="id" option-label="name"
                     @update:model-value="selectPaleta" :options="colorsStore.paletas" label="Paleta de cores">
-
                     <template v-slot:option="scope">
                         <q-item v-bind="scope.itemProps">
                             <q-item-section avatar>

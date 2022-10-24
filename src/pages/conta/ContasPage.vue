@@ -8,13 +8,13 @@
                     <q-icon name="style" size="56px" />
                     <div class="q-mt-md">
                         <div class="text-h6">
-                            {{ toRealSymbol(contaStore.totalNaSoma) }}
+                            {{ toReal(contaStore.totalNaSoma) }}
                         </div>
                         <div class="text-caption">Incluidas nas somas</div>
                     </div>
                     <div class="q-mt-md">
                         <div class="text-h6">
-                            {{ toRealSymbol(contaStore.totalSemSoma) }}
+                            {{ toReal(contaStore.totalSemSoma) }}
                         </div>
                         <div class="text-caption">Soma das demais contas</div>
                     </div>
@@ -26,12 +26,14 @@
                         {{ lorem }}
                     </div>
                 </q-carousel-slide>
+
                 <q-carousel-slide name="layers" class="column no-wrap flex-center">
                     <q-icon name="layers" size="56px" />
                     <div class="q-mt-md text-center">
                         {{ lorem }}
                     </div>
                 </q-carousel-slide>
+
                 <q-carousel-slide name="map" class="column no-wrap flex-center">
                     <q-icon name="terrain" size="56px" />
                     <div class="q-mt-md text-center">
@@ -56,6 +58,12 @@
                     </q-td>
                 </template>
 
+                <template v-slot:body-cell-saldo="props">
+                    <q-td :props="props" class="q-gutter-x-sm">
+                        <q-chip outline square color="blue" text-color="white" :label="toReal(props.row.saldo)" />
+                    </q-td>
+                </template>
+
                 <template v-slot:body-cell-acoes="props">
                     <q-td :props="props" class="q-gutter-x-sm">
                         <q-btn icon="mdi-pencil-outline" color="info" dense :to="{
@@ -72,6 +80,15 @@
             </q-table>
         </div>
 
+        <div class="row q-col-gutter-sm q-my-md">
+            <div class="col-xs-12 col-sm-6">
+                <TransferenciasList />
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <HistoricoTimeline />
+            </div>
+        </div>
+
         <q-page-sticky position="bottom-right" :offset="[18, 18]">
             <q-btn v-if="$q.platform.is.mobile" fab icon="mdi-plus" color="primary" :to="{ name: 'conta-form' }">
             </q-btn>
@@ -80,14 +97,16 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from "vue";
-import { useContaStore } from "src/stores/conta-store";
 import { columnsConta } from "src/model/columns";
 import { toRealSymbol } from "src/model/currency-helper";
+import { useContaStore } from "src/stores/conta-store";
+import { defineComponent, onMounted, ref } from "vue";
+import HistoricoTimeline from './HistoricoTimeline.vue';
+import TransferenciasList from './TransferenciasList.vue';
 
 export default defineComponent({
     name: "ContasPage",
-
+    components: { TransferenciasList, HistoricoTimeline },
     setup() {
         const loading = ref(false);
         const contaStore = useContaStore();
@@ -103,7 +122,7 @@ export default defineComponent({
             loading,
             contaStore,
             columnsConta,
-            toRealSymbol,
+            toReal: toRealSymbol,
             slide: ref("style"),
             lorem: "Lorem ipsum dolor, sit amet consectetur adipisicing elit. Itaque voluptatem totam, architecto cupiditate officia rerum, error dignissimos praesentium libero ab nemo.",
         };

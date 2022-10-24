@@ -110,7 +110,7 @@
                     <q-tr>
                         <q-td colspan="100%">
                             <div class="q-pa-md flex flex-center">
-                                <q-pagination :to-fn="pageChange" v-model="page"
+                                <q-pagination @click="listar" v-model="page"
                                     :max="receitaStore.receitasPage.totalPages" />
                             </div>
                         </q-td>
@@ -118,6 +118,16 @@
                 </template>
             </q-table>
         </div>
+
+        <div class="row justify-center">
+            <div class="col q-my-md q-mr-sm">
+                <ReceitasTimeline />
+            </div>
+            <div class="col q-my-md q-mr-sm">
+
+            </div>
+        </div>
+
         <q-page-sticky position="bottom-right" :offset="[18, 18]">
             <q-btn v-if="$q.platform.is.mobile" fab icon="mdi-plus" color="primary" :to="{ name: 'receita-form' }">
             </q-btn>
@@ -135,9 +145,13 @@ import { useCategoriaStore } from 'src/stores/categoria-store';
 import { useContaStore } from 'src/stores/conta-store';
 import { useReceitaStore } from 'src/stores/receita-store';
 import { defineComponent, onMounted, ref } from 'vue'
+import ReceitasTimeline from './ReceitasTimeline.vue'
 
 export default defineComponent({
     name: 'ReceitasPage',
+    components: {
+        ReceitasTimeline
+    },
     setup() {
         const loading = ref(false);
         const receitaStore = useReceitaStore()

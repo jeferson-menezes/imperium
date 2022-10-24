@@ -1,111 +1,69 @@
 <template>
-    <q-page class="flex flex-center">
-        <apexchart
-            type="area"
-            width="600"
-            :options="chartOptions"
-            :series="series"
-        ></apexchart>
+    <q-page class="row">
+        <q-card class="col-8">
+            <q-card-section>
+                <div class="text-h6">Our Changing Planet</div>
+                <div class="text-subtitle2">by John Doe</div>
+            </q-card-section>
+
+            <q-card-section ref="scrollTargetRef" style="max-height: 500px; overflow: auto;">
+                <q-infinite-scroll :disable="scrollDisable" :initial-index="0" @load="onLoadRef" :offset="30"
+                    :scroll-target="scrollTargetRef">
+                    <div v-for="(item, index) in itemsRef" :key="index" class="caption">
+                        <p>{{index}} - Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
+                    </div>
+                    <template v-slot:loading>
+                        <div class="row justify-center q-my-md">
+                            <q-spinner-dots color="primary" size="40px" />
+                        </div>
+                    </template>
+                </q-infinite-scroll>
+            </q-card-section>
+        </q-card>
     </q-page>
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 
 export default defineComponent({
     name: "HomePage",
 
     setup() {
-        const generateDayWiseTimeSeries = (
-            baseval: number,
-            count: number,
-            yrange: {
-                min: number;
-                max: number;
-            }
-        ) => {
-            let i = 0;
-            const series = [];
-            while (i < count) {
-                const x = baseval;
-                const y =
-                    Math.floor(Math.random() * (yrange.max - yrange.min + 1)) +
-                    yrange.min;
+        const itemsRef = ref([{}, {}, {}, {}, {}, {}, {}])
+        const scrollTargetRef = ref(undefined)
+        const scrollDisable = ref(false)
 
-                series.push([x, y]);
-                baseval += 86400000;
-                i++;
-            }
-            return series;
-        };
+        const loadMore = () => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            return new Promise<any[]>((resolve) => {
+                setTimeout(() => {
+                    resolve([{}, {}, {}, {}, {}])
+                }, 1000);
+            });
+        }
 
-        const series = [
-            {
-                name: "South",
-                data: generateDayWiseTimeSeries(
-                    new Date("11 Feb 2017 GMT").getTime(),
-                    20,
-                    {
-                        min: 10,
-                        max: 60,
+        const onLoadRef = (index: number, done: () => void) => {
+            console.log(index);
+            loadMore()
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                .then(res => itemsRef.value.push(...res as any[]))
+                .finally(() => {
+                    if (index > 10) {
+                        console.log('log...');
+
+                        scrollDisable.value = true
                     }
-                ),
-            },
-            {
-                name: "North",
-                data: generateDayWiseTimeSeries(
-                    new Date("11 Feb 2017 GMT").getTime(),
-                    20,
-                    {
-                        min: 10,
-                        max: 20,
-                    }
-                ),
-            },
-            {
-                name: "Central",
-                data: generateDayWiseTimeSeries(
-                    new Date("11 Feb 2017 GMT").getTime(),
-                    20,
-                    {
-                        min: 10,
-                        max: 15,
-                    }
-                ),
-            },
-        ];
+                    done()
+                })
+        }
 
-        const chartOptions = {
-            chart: {
-                type: "area",
-                height: 500,
-                stacked: true,
-                events: {},
-            },
-            colors: ["#008FFB", "#00E396", "#CED4DC"],
-            dataLabels: {
-                enabled: false,
-            },
-            stroke: {
-                curve: "smooth",
-            },
-            fill: {
-                type: "gradient",
-                gradient: {
-                    opacityFrom: 0.6,
-                    opacityTo: 0.8,
-                },
-            },
-            legend: {
-                position: "top",
-                horizontalAlign: "left",
-            },
-            xaxis: {
-                type: "datetime",
-            },
-        };
-
-        return { chartOptions, series };
-    },
+        return {
+            onLoadRef,
+            itemsRef,
+            scrollTargetRef,
+            scrollDisable
+        }
+    }
 });
 </script>

@@ -53,12 +53,12 @@
 import { defineComponent, ref, computed, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import useNotify from "../composable/useNotify";
-import { required } from "src/model/rules";
 import { useContaStore } from "src/stores/conta-store";
 import { useTipoContaStore } from "src/stores/tipo-conta-store";
-import { Conta } from "src/model/conta";
+import { Conta, contaBase, contaRules } from "src/model/conta";
 import { ErrorResponse } from "src/model/error";
 import MoneyField from 'src/components/MoneyField.vue'
+import { clone } from "src/model/objeto-helper";
 
 export default defineComponent({
 
@@ -67,31 +67,16 @@ export default defineComponent({
     components: {
         MoneyField
     },
+
     setup() {
+        const { notifySuccess, notifyError } = useNotify();
         const tipoContaStore = useTipoContaStore();
         const contaStore = useContaStore();
         const route = useRoute();
         const router = useRouter();
         const loading = ref(false);
         const formRef = ref(null);
-
-        const rules = {
-            saldo: [required("O salvo é obrigatório")],
-            nome: [required("O Nome é obrigatório")],
-            descricao: [required("A descrição é obrigatória")],
-        };
-
-        const form = ref<Conta>({
-            id: 0,
-            ativo: true,
-            descricao: "",
-            incluiSoma: true,
-            nome: "",
-            saldo: 0,
-            tipoContaId: undefined,
-        });
-
-        const { notifySuccess, notifyError } = useNotify();
+        const form = ref<Conta>(clone(contaBase));
 
         const isUpdate = computed(() => route.params.id);
 
@@ -101,11 +86,12 @@ export default defineComponent({
 
                 if (isUpdate.value) {
                     await contaStore.atualizar(form.value.id, form.value);
+                    router.push({ name: "contas" });
                 } else {
                     await contaStore.adicionar(form.value);
+                    form.value = clone(contaBase)
                 }
                 notifySuccess(isUpdate.value ? "Atualizado" : "Cadastrado" + "com sucesso");
-                router.push({ name: "contas" });
             } catch (error) {
                 const err = error as ErrorResponse
                 notifyError(err.message);
@@ -124,13 +110,13 @@ export default defineComponent({
         });
 
         return {
-            loading,
             form,
-            formRef,
-            isUpdate,
-            rules,
             submit,
+            formRef,
+            loading,
+            isUpdate,
             tipoContaStore,
+            rules: contaRules,
         };
     },
 });

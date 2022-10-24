@@ -44,6 +44,7 @@ import ColorsPicker from "./ColorsPicker.vue";
 import IconsPicker from './IconsPicker.vue'
 
 export default defineComponent({
+    name: 'CategoriaFormPage',
     components: {
         ColorsPicker,
         IconsPicker
