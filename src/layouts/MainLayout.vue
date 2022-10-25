@@ -30,6 +30,12 @@ import EssentialLink from "components/EssentialLink.vue";
 
 const linksList = [
     {
+        title: "Home",
+        caption: "quasar.dev",
+        icon: "mdi-home",
+        routerName: "home",
+    },
+    {
         title: "Contas",
         caption: "quasar.dev",
         icon: "mdi-bank",

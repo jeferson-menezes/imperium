@@ -45,6 +45,7 @@
         <div class="row justify-center">
             <q-table class="col-12" title="Lista de provetos" row-key="id" :rowsPerPage="20" :loading="loading"
                 :columns="columnsConta" :rows="contaStore.contas">
+
                 <template v-slot:top>
                     <div class="text-h6">Contas</div>
                     <q-space></q-space>
@@ -54,7 +55,7 @@
 
                 <template v-slot:body-cell-tipoContaIcone="props">
                     <q-td :props="props" class="q-gutter-x-sm">
-                        <q-icon :color="props.row.tipoContaCor" :name="'mdi-'+props.row.tipoContaIcone" size="3em" />
+                        <q-icon :color="props.row.tipoContaCor" :name="'mdi-' + props.row.tipoContaIcone" size="3em" />
                     </q-td>
                 </template>
 
@@ -66,9 +67,17 @@
 
                 <template v-slot:body-cell-acoes="props">
                     <q-td :props="props" class="q-gutter-x-sm">
+
+                        <q-btn icon="mdi-chart-timeline" color="purple" dense :to="{
+                            name: 'conta-detalhe',
+                            params: { id: props.row.id }
+                        }">
+                            <q-tooltip> Detalhes </q-tooltip>
+                        </q-btn>
+
                         <q-btn icon="mdi-pencil-outline" color="info" dense :to="{
                             name: 'conta-form',
-                            params: { id: props.row.id },
+                            params: { id: props.row.id }
                         }">
                             <q-tooltip> Editar </q-tooltip>
                         </q-btn>

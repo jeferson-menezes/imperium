@@ -8,7 +8,7 @@
             </q-item-section>
 
             <q-item-section>
-                <q-item-label class="text-h5">Histórico de despesas</q-item-label>
+                <q-item-label class="text-h5">Atividades</q-item-label>
             </q-item-section>
         </q-item>
 
@@ -16,9 +16,18 @@
             <q-infinite-scroll :debounce="1000" :disable="scrollDisable" :initial-index="0" @load="onLoadRef"
                 :offset="100" :scroll-target="scrollTargetRef">
                 <q-timeline color="secondary" layout="comfortable" side="right">
-                    <q-timeline-entry :color="'red'"
+                    <q-timeline-entry
+                        :color="item.natureza === 'DESPESA' ? 'red' : item.natureza === 'RECEITA' ? 'green' : 'purple'"
+                        :icon="item.natureza === 'DESPESA' ? 'mdi-cart' : item.natureza === 'RECEITA' ? 'payments' :
+                        'mdi-bank-transfer'" side="left" :title="toReal(item.valor)"
                         :subtitle="formatDate(item.data + ' ' + item.hora, 'DD MMM YYYY HH:mm')"
                         v-for="item in historiaStore.historiasPage?.content" :key="item.id">
+
+                        <div v-if="!!item.contaDestinoNome" class="text-subtitle2">
+                            {{ item.contaNome }}
+                            <q-icon :name="'mdi-swap-horizontal'" size="sm" />
+                            {{ item.contaDestinoNome }}
+                        </div>
                         <div>
                             {{ item.descricao }}
                         </div>
@@ -38,29 +47,36 @@
 
 <script lang="ts">
 import { toRealSymbol } from 'src/model/currency-helper';
+import { useHistoriaStore } from 'src/stores/historia-store'
+import { defineComponent, ref, onBeforeMount } from 'vue'
 import { formatDate } from 'src/model/date-helper';
-import { NaturezaHistoria } from 'src/model/historia';
-import { useHistoriaStore } from 'src/stores/historia-store';
-import { defineComponent, onBeforeMount, ref } from 'vue';
 
 export default defineComponent({
-    name: 'DespesasTimeline',
-    setup() {
+    name: 'ContaTimeline',
+
+    props: {
+        contaId: {
+            required: true
+        }
+    },
+
+    setup(props) {
         const historiaStore = useHistoriaStore()
         const scrollTargetRef = ref(undefined)
         const scrollDisable = ref(false)
 
         const params = (page: number) => ({
             page,
-            size: 6,
-            natureza: NaturezaHistoria.DESPESA
+            size: 10,
+            contaId: props.contaId
         })
 
         const onLoadRef = async (index: number, done: () => void) => {
             await historiaStore.loadPage(params(index))
                 .finally(() => {
                     done()
-                    if ((index + 1) === historiaStore.historiasPage.totalPages) {
+                    if ((index + 1) === historiaStore.historiasPage.totalPages ||
+                        (index + 1) > historiaStore.historiasPage.totalPages) {
                         scrollDisable.value = true
                     }
                 })
@@ -77,8 +93,7 @@ export default defineComponent({
             scrollDisable,
             scrollTargetRef,
             toReal: toRealSymbol,
-
         }
-    }
+    },
 })
 </script>

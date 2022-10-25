@@ -16,6 +16,10 @@ export interface Conta {
     nome: string;
     saldo: number;
     tipoContaId?: number;
+    tipoContaCor?: string;
+    tipoContaIcone?: string;
+    tipoContaNome?: string;
+    usuarioNome?: string;
 }
 
 export const contaBase = {

@@ -23,10 +23,13 @@
                             'mdi-bank-transfer'" side="left" :title="toReal(item.valor)"
                             :subtitle="formatDate(item.data + ' ' + item.hora, 'DD MMM YYYY HH:mm')"
                             v-for="item in historiaStore.historiasPage?.content" :key="item.id">
+                            <div v-if="!!item.contaDestinoNome" class="text-subtitle2">
+                                {{ item.contaNome }}
+                                <q-icon :name="'mdi-swap-horizontal'" size="sm" />
+                                {{ item.contaDestinoNome }}
+                            </div>
                             <div>
-                                {{item.descricao}}
-                                {{item.natureza === 'DESPESA' ? 'mdi-cart' : item.natureza === 'RECEITA' ? 'payments' :
-                                'mdi-bank-transfer'}}
+                                {{ item.descricao }}
                             </div>
                         </q-timeline-entry>
                     </q-timeline>

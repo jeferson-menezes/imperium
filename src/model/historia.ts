@@ -11,4 +11,6 @@ export interface Historia {
     descricao: string;
     valor: number;
     natureza: NaturezaHistoria;
+    contaDestinoNome?: string;
+    contaNome?: string;
 }

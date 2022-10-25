@@ -32,6 +32,11 @@ const routes: RouteRecordRaw[] = [
                 component: () => import("pages/conta/ContaFormPage.vue")
             },
             {
+                path: "conta/detalhe/:id",
+                name: "conta-detalhe",
+                component: () => import("pages/conta/ContaDetalhePage.vue")
+            },
+            {
                 path: "categorias",
                 name: "categorias",
                 component: () => import("pages/categoria/CategoriasPage.vue")
@@ -51,7 +56,6 @@ const routes: RouteRecordRaw[] = [
                 name: "despesa-form",
                 component: () => import("pages/despesa/DespesaFormPage.vue")
             },
-
             {
                 path: "receitas",
                 name: "receitas",
