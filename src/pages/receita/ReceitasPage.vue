@@ -47,7 +47,7 @@
                         <div class="col">
                             <q-select rounded standout dense @update:model-value="categoriaChange" map-options
                                 emit-value option-value="id" option-label="nome" v-model="categoriaId"
-                                :options="categoriaStore.filtrarPorNatureza('DESPESA')" label="Categoria">
+                                :options="categoriaStore.filtrarPorNatureza('RECEITA')" label="Categoria">
 
                                 <template v-slot:append>
                                     <q-icon v-if="categoriaId" name="close"

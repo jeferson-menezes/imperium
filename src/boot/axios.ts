@@ -8,8 +8,6 @@ declare module "@vue/runtime-core" {
         $axios: AxiosInstance;
     }
 }
-console.log(process.env.ORIGIN_EXTERNO);
-
 const externo = window.location.origin === process.env.ORIGIN_EXTERNO
 
 let baseURL = externo ? process.env.IMPERIUM_API_EXTERNO : process.env.IMPERIUM_API_INTERNO;

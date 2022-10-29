@@ -23,10 +23,7 @@ export default defineComponent({
         const picker = ref()
         const date = computed({
             get: () => props.modelValue,
-            set: (value) => {
-                console.log(value);
-                emit('update:modelValue', value)
-            }
+            set: (value) => emit('update:modelValue', value)
         })
 
         const updateProxy = () => {

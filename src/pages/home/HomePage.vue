@@ -31,6 +31,29 @@
                     <AreaChart :color="colorReceita" :data="receitaStore.valores" />
                 </q-card>
             </div>
+
+            <div class="col-sm-6 col-md-3 col-12 q-pa-sm">
+                <q-card>
+                    <q-item>
+                        <q-item-section avatar>
+                            <q-avatar>
+                                <q-icon color="red" name="mdi-cart" size="2em" />
+                            </q-avatar>
+                        </q-item-section>
+
+                        <q-item-section>
+                            <q-item-label class="text-h6">Despesas</q-item-label>
+                            <q-item-label caption>
+                                <div class="row">
+                                    <div class="col text-subtitle2">Total: {{ toReal(despesaStore.somaDespesas) }}</div>
+                                    <div class="col text-subtitle2">Saidas: {{ despesaStore.totalDespesas }}</div>
+                                </div>
+                            </q-item-label>
+                        </q-item-section>
+                    </q-item>
+                    <AreaChart :color="colorDespesa" :data="despesaStore.valores" />
+                </q-card>
+            </div>
             <div class="col-sm-6 col-md-3 col-12 q-pa-sm">
                 <q-card>
                     <q-item>
@@ -83,28 +106,6 @@
                 </q-card>
             </div>
 
-            <div class="col-sm-6 col-md-3 col-12 q-pa-sm">
-                <q-card>
-                    <q-item>
-                        <q-item-section avatar>
-                            <q-avatar>
-                                <q-icon color="red" name="mdi-cart" size="2em" />
-                            </q-avatar>
-                        </q-item-section>
-
-                        <q-item-section>
-                            <q-item-label class="text-h6">Despesas</q-item-label>
-                            <q-item-label caption>
-                                <div class="row">
-                                    <div class="col text-subtitle2">Total: {{ toReal(despesaStore.somaDespesas) }}</div>
-                                    <div class="col text-subtitle2">Saidas: {{ despesaStore.totalDespesas }}</div>
-                                </div>
-                            </q-item-label>
-                        </q-item-section>
-                    </q-item>
-                    <AreaChart :color="colorDespesa" :data="despesaStore.valores" />
-                </q-card>
-            </div>
         </div>
 
         <div class="row justify-between items-center content-center">
