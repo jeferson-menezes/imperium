@@ -9,8 +9,8 @@ declare module "@vue/runtime-core" {
     }
 }
 
-let baseURL = 'http://zionflame.ddns.net:9877';
-let baseURLColors = 'http://zionflame.ddns.net:9876'
+let baseURL = 'https://zionflame.ddns.net:9877';
+let baseURLColors = 'https://zionflame.ddns.net:9876'
 
 if (process.env.NODE_ENV === 'development') {
   baseURL = 'http://localhost:8081'
