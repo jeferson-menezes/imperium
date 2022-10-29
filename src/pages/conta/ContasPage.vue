@@ -43,11 +43,12 @@
             </q-carousel>
         </div>
         <div class="row justify-center">
-            <q-table class="col-12" title="Lista de provetos" row-key="id" :rowsPerPage="20" :loading="loading"
-                :columns="columnsConta" :rows="contaStore.contas">
+            <q-table class="col-12" title="Lista de provetos" row-key="id" :loading="loading" :columns="columnsConta"
+                :rows="contaStore.contas" :rows-per-page-options="[10, 20, 30, 0]">
 
                 <template v-slot:top>
-                    <div class="text-h6">Contas</div>
+                    <div class=" text-h6">Contas
+                    </div>
                     <q-space></q-space>
                     <q-btn v-if="$q.platform.is.desktop" label="novo" icon="mdi-plus" color="primary"
                         :to="{ name: 'conta-form' }" />
@@ -62,6 +63,11 @@
                 <template v-slot:body-cell-saldo="props">
                     <q-td :props="props" class="q-gutter-x-sm">
                         <q-chip outline square color="blue" text-color="white" :label="toReal(props.row.saldo)" />
+                    </q-td>
+                </template>
+                <template v-slot:body-cell-ativo="props">
+                    <q-td :props="props" class="q-gutter-x-sm">
+                        <q-badge :color="props.row.ativo ? 'green' : 'red'" rounded class="q-mr-sm" />
                     </q-td>
                 </template>
 

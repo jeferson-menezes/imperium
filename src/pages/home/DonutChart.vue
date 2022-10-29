@@ -1,10 +1,9 @@
 <template>
-
-    <apexchart type="donut" :options="chartOptions" :series="series"></apexchart>
-
+    <apexchart type="donut" height="370" :options="chartOptions" :series="series"></apexchart>
 </template>
 
 <script lang="ts">
+import { toReal } from 'src/model/currency-helper';
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
@@ -24,7 +23,17 @@ export default defineComponent({
         const chartOptions = computed(() => {
             return {
                 labels: Object.keys(props.data),
-                chart: { type: 'donut' },
+                chart: {
+                    type: 'donut',
+                },
+                tooltip: {
+                    enabled: true,
+                    y: {
+                        formatter: function (val: number) {
+                            return toReal(val)
+                        }
+                    }
+                },
                 responsive: [
                     {
                         breakpoint: 480,

@@ -8,9 +8,12 @@ declare module "@vue/runtime-core" {
         $axios: AxiosInstance;
     }
 }
+console.log(process.env.ORIGIN_EXTERNO);
 
-let baseURL = 'https://zionflame.ddns.net:9877';
-let baseURLColors = 'https://zionflame.ddns.net:9876'
+const externo = window.location.origin === process.env.ORIGIN_EXTERNO
+
+let baseURL = externo ? process.env.IMPERIUM_API_EXTERNO : process.env.IMPERIUM_API_INTERNO;
+let baseURLColors = externo ? process.env.ICONS_API_EXTERNO : process.env.ICONS_API_INTERNO;
 
 if (process.env.NODE_ENV === 'development') {
   baseURL = 'http://localhost:8081'

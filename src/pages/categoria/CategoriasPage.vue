@@ -2,7 +2,8 @@
     <q-page padding>
         <div class="row justify-center">
             <q-table class="col-12" title="Lista de categorias" row-key="id" :rowsPerPage="20" :loading="loading"
-                :columns="columnsCategoria" :rows="categoriaStore.categorias">
+                :columns="columnsCategoria" :rows="categoriaStore.categorias"
+                :rows-per-page-options="[10, 20, 30, 40, 0]">
 
                 <template v-slot:top>
                     <div class="text-h6">Categorias</div>
@@ -13,20 +14,20 @@
 
                 <template v-slot:body-cell-icone="props">
                     <q-td :props="props" class="q-gutter-x-sm">
-                        <q-icon :color="props.row.cor" :name="'mdi-'+props.row.icone" size="3em" />
+                        <q-icon :color="props.row.cor" :name="'mdi-' + props.row.icone" size="3em" />
                     </q-td>
                 </template>
 
                 <template v-slot:body-cell-natureza="props">
                     <q-td :props="props" class="q-gutter-x-sm">
-                        <q-badge rounded :color="props.row.natureza === 'RECEITA'? 'green' :'red'"
-                            :label="props.row.natureza " />
+                        <q-badge rounded :color="props.row.natureza === 'RECEITA' ? 'green' : 'red'"
+                            :label="props.row.natureza" />
                     </q-td>
                 </template>
 
                 <template v-slot:body-cell-ativo="props">
                     <q-td :props="props" class="q-gutter-x-sm">
-                        <q-badge :color="props.row.ativo? 'green' :'red'" rounded class="q-mr-sm" />
+                        <q-badge :color="props.row.ativo ? 'green' : 'red'" rounded class="q-mr-sm" />
                     </q-td>
                 </template>
 

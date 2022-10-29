@@ -1,13 +1,15 @@
 <template>
     <q-page padding>
+
         <div class="row column-xs q-gutter-md">
             <div class="col col-xs-12 text-right">
                 <MonthPicker @change="listar" v-model="hoje">
                 </MonthPicker>
             </div>
         </div>
-        <div class="row justify-around items-center content-center q-gutter-md">
-            <div class="col-sm-6 col-md-3 col-12 q-px-xs">
+
+        <div class="row justify-center items-center content-center">
+            <div class="col-sm-6 col-md-3 col-12 q-pa-sm">
                 <q-card>
                     <q-item>
                         <q-item-section avatar>
@@ -29,7 +31,7 @@
                     <AreaChart :color="colorReceita" :data="receitaStore.valores" />
                 </q-card>
             </div>
-            <div class="col-sm-6 col-md-3 col-12 q-px-xs">
+            <div class="col-sm-6 col-md-3 col-12 q-pa-sm">
                 <q-card>
                     <q-item>
                         <q-item-section avatar>
@@ -52,9 +54,36 @@
                         </q-item-section>
                     </q-item>
 
+                    <AreaChart :color="colorReceita" :data="[]" />
                 </q-card>
             </div>
-            <div class="col-sm-6 col-md-3 col-12 q-px-xs">
+            <div class="col-sm-6 col-md-3 col-12 q-pa-sm">
+                <q-card>
+                    <q-item>
+                        <q-item-section avatar>
+                            <q-avatar>
+                                <q-icon color="orange" name="mdi-card" size="2em" />
+                            </q-avatar>
+                        </q-item-section>
+
+                        <q-item-section>
+                            <q-item-label class="text-h6">Cartão</q-item-label>
+                            <q-item-label caption>
+                                <div class="row">
+                                    <div class="col text-subtitle2">
+                                        Total:{{ toReal(0) }}
+                                    </div>
+                                    <div class="col"></div>
+                                </div>
+                            </q-item-label>
+                        </q-item-section>
+                    </q-item>
+
+                    <AreaChart :color="colorReceita" :data="[]" />
+                </q-card>
+            </div>
+
+            <div class="col-sm-6 col-md-3 col-12 q-pa-sm">
                 <q-card>
                     <q-item>
                         <q-item-section avatar>
@@ -77,28 +106,40 @@
                 </q-card>
             </div>
         </div>
-        <div class="row justify-around items-center content-center q-gutter-md q-my-sm">
-            <div class="col-sm-6 col-md-5 col-12 q-px-xs">
+
+        <div class="row justify-between items-center content-center">
+            <div class="col-md-6 col-12 q-pa-sm">
                 <q-card>
+                    <q-card-section class="text-h6">
+                        Despesas por categorias
+                    </q-card-section>
                     <DonutChart :data="despesaStore.agruparCategorias" />
                 </q-card>
             </div>
-            <div class="col-sm-6 col-md-5 col-12 q-px-xs">
+            <div class="col-md-6 col-12 q-pa-sm">
                 <q-card>
+                    <q-card-section class="text-h6">
+                        Receitas por categorias
+                    </q-card-section>
                     <DonutChart :data="receitaStore.agruparCategorias" />
                 </q-card>
             </div>
-
         </div>
 
-        <div class="row justify-around items-center content-center q-gutter-md q-my-sm">
-            <div class="col-sm-6 col-md-5 col-12 q-px-xs">
+        <div class="row justify-between items-center content-center ">
+            <div class="col-md-6 col-12 q-pa-sm">
                 <q-card>
+                    <q-card-section class="text-h6">
+                        Despesas por categorias
+                    </q-card-section>
                     <ColumnChart :data="despesaStore.agruparCategorias" />
                 </q-card>
             </div>
-            <div class="col-sm-6 col-md-5 col-12 q-px-xs">
+            <div class="col-md-6 col-12 q-pa-sm">
                 <q-card>
+                    <q-card-section class="text-h6">
+                        Receitas por categorias
+                    </q-card-section>
                     <ColumnChart :data="receitaStore.agruparCategorias" />
                 </q-card>
             </div>

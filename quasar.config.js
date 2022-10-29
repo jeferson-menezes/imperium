@@ -51,8 +51,14 @@ module.exports = configure(function(ctx) {
 
         // Full list of options: https://v2.quasar.dev/quasar-cli-webpack/quasar-config-js#Property%3A-build
         build: {
-            vueRouterMode: "hash" // available values: 'hash', 'history'
-
+            vueRouterMode: "hash", // available values: 'hash', 'history'
+            env: {
+                ORIGIN_EXTERNO: "https://zionflame.netlify.app",
+                IMPERIUM_API_EXTERNO: "https://zionflame.ddns.net:9877",
+                IMPERIUM_API_INTERNO: "https://192.168.15.100:8081",
+                ICONS_API_EXTERNO: "https://zionflame.ddns.net:9878",
+                ICONS_API_INTERNO: "https://192.168.15.100:8082"
+            }
             // transpile: false,
             // publicPath: '/',
 

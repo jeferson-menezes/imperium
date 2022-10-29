@@ -50,6 +50,10 @@ export const useReceitaStore = defineStore("receita", {
             return api
                 .get("receitas", { params })
                 .then(res => (this.receitas = res.data));
+        },
+
+        deletar(id: number) {
+            return api.delete(`receitas/${id}`);
         }
     }
 });

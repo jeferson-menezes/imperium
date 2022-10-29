@@ -2,8 +2,8 @@
     <q-page padding>
         <div class="row justify-center">
 
-            <q-table class="col-12" title="Lista de categorias" hide-bottom row-key="id" :rowsPerPage="20"
-                :loading="loading" :columns="columnsDespesa" :rows="despesaStore.despesasPage?.content">
+            <q-table class="col-12" title="Lista de categorias" hide-bottom row-key="id" :loading="loading"
+                :columns="columnsDespesa" :rows="despesaStore.despesasPage?.content" :rows-per-page-options="[0]">
 
                 <template v-slot:top>
                     <div class="row col-sm-8 col-xs-12 start content-start">
@@ -52,7 +52,7 @@
 
                                 <template v-slot:append>
                                     <q-icon v-if="categoriaId" name="close"
-                                        @click.stop.prevent="(categoriaId = undefined) ||  categoriaChange(undefined)"
+                                        @click.stop.prevent="(categoriaId = undefined) || categoriaChange(undefined)"
                                         class="cursor-pointer" />
                                 </template>
 
@@ -89,17 +89,17 @@
 
                 <template v-slot:body-cell-data="props">
                     <q-td :props="props" class="q-gutter-x-sm">
-                        {{formatDate(props.row.data, 'DD MMM YYYY')}}
+                        {{ formatDate(props.row.data, 'DD MMM YYYY') }}
                     </q-td>
                 </template>
 
                 <template v-slot:body-cell-acoes="props">
                     <q-td :props="props" class="q-gutter-x-sm">
                         <q-btn icon="mdi-pencil-outline" color="info" dense
-                            :to="{name: 'despesa-form', params: { id: props.row.id }}">
+                            :to="{ name: 'despesa-form', params: { id: props.row.id } }">
                             <q-tooltip> Editar </q-tooltip>
                         </q-btn>
-                        <q-btn icon="mdi-delete-outline" color="negative" dense>
+                        <q-btn icon="mdi-delete-outline" color="negative" dense @click="excluir(props.row)">
                             <q-tooltip> Deletar </q-tooltip>
                         </q-btn>
                     </q-td>
@@ -110,7 +110,8 @@
                         <q-td colspan="100%">
                             <div class="q-pa-md flex flex-center">
                                 <q-pagination @click="listar" v-model="page"
-                                    :max="despesaStore?.despesasPage?.totalPages || 0" />
+                                    :max="despesaStore?.despesasPage?.totalPages || 0" :max-pages="6"
+                                    :boundary-numbers="false" gutter="sm" />
                             </div>
                         </q-td>
                     </q-tr>
@@ -120,11 +121,11 @@
 
         </div>
 
-        <div class="row justify-center">
-            <div class="col q-my-md q-mr-sm">
+        <div class="row justify-start">
+            <div class="col-sm-6 col-12 q-my-md q-mr-sm">
                 <DespesasTimeline />
             </div>
-            <div class="col q-my-md q-mr-sm">
+            <div class="col-sm-6 col-12 q-my-md q-mr-sm">
 
             </div>
         </div>
@@ -137,21 +138,27 @@
 </template>
 
 <script lang="ts">
+import { useQuasar } from 'quasar';
 import { columnsDespesa } from 'src/model/columns';
 import { toRealSymbol } from 'src/model/currency-helper';
 import { formatDate } from 'src/model/date-helper';
+import { Despesa } from 'src/model/despesa';
+import { ErrorResponse } from 'src/model/error';
 import { FilterEhAno, FilterEhData, FilterEhMes, FilterEhTexto, FilterEhValor, FilterVazio, Params } from 'src/model/filtro-chain';
 import { Direction } from 'src/model/paginacao';
 import { useCategoriaStore } from 'src/stores/categoria-store';
 import { useContaStore } from 'src/stores/conta-store';
 import { useDespesaStore } from 'src/stores/despesa-store';
 import { defineComponent, onMounted, ref } from 'vue';
+import useNotify from '../composable/useNotify';
 import DespesasTimeline from './DespesasTimeline.vue';
 
 export default defineComponent({
     name: 'DespesasPage',
     components: { DespesasTimeline },
     setup() {
+        const $q = useQuasar();
+        const { notifySuccess, notifyError } = useNotify();
         const loading = ref(false);
         const despesaStore = useDespesaStore()
         const contaStore = useContaStore()
@@ -190,11 +197,31 @@ export default defineComponent({
         const params = () => {
             return {
                 page: page.value - 1,
-                size: 5,
+                size: 10,
                 sort: `data,${Direction.DESC}`,
                 categoriaId: categoriaId.value,
                 contaId: contaId.value,
                 ...query
+            }
+        }
+
+        const excluir = (despesa: Despesa) => {
+            try {
+                loading.value = true
+                $q.dialog({
+                    title: "Confirme",
+                    message: `Você realmente quer excluir ${despesa.descricao} valor ${toRealSymbol(despesa.valor)}`,
+                    cancel: true,
+                    persistent: true,
+                }).onOk(async () => {
+                    await despesaStore.deletar(despesa.id)
+                    notifySuccess("Excluido com sucesso!")
+                });
+            } catch (error) {
+                const err = error as ErrorResponse
+                notifyError(err.message);
+            } finally {
+                loading.value = false;
             }
         }
 
@@ -209,6 +236,7 @@ export default defineComponent({
             listar,
             filter,
             contaId,
+            excluir,
             loading,
             contaStore,
             formatDate,

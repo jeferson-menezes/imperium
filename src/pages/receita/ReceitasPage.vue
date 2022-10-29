@@ -1,8 +1,8 @@
 <template>
     <q-page padding>
         <div class="row justify-center">
-            <q-table class="col-12" title="Lista de categorias" hide-bottom row-key="id" :rowsPerPage="20"
-                :loading="loading" :columns="columnsReceita" :rows="receitaStore.receitasPage?.content">
+            <q-table class="col-12" title="Lista de categorias" hide-bottom row-key="id" :loading="loading"
+                :columns="columnsReceita" :rows="receitaStore.receitasPage?.content" :rows-per-page-options="[0]">
 
                 <template v-slot:top>
                     <div class="row col-sm-8 col-xs-12 start content-start">
@@ -22,7 +22,7 @@
 
                                 <template v-slot:append>
                                     <q-icon v-if="contaId" name="close"
-                                        @click.stop.prevent="(contaId = undefined) ||contaChange(undefined)"
+                                        @click.stop.prevent="(contaId = undefined) || contaChange(undefined)"
                                         class="cursor-pointer" />
                                 </template>
 
@@ -88,7 +88,7 @@
 
                 <template v-slot:body-cell-data="props">
                     <q-td :props="props" class="q-gutter-x-sm">
-                        {{formatDate(props.row.data, 'DD MMM YYYY')}}
+                        {{ formatDate(props.row.data, 'DD MMM YYYY') }}
                     </q-td>
                 </template>
 
@@ -100,7 +100,7 @@
                         }">
                             <q-tooltip> Editar </q-tooltip>
                         </q-btn>
-                        <q-btn icon="mdi-delete-outline" color="negative" dense>
+                        <q-btn icon="mdi-delete-outline" color="negative" dense @click="excluir(props.row)">
                             <q-tooltip> Deletar </q-tooltip>
                         </q-btn>
                     </q-td>
@@ -110,8 +110,8 @@
                     <q-tr>
                         <q-td colspan="100%">
                             <div class="q-pa-md flex flex-center">
-                                <q-pagination @click="listar" v-model="page"
-                                    :max="receitaStore.receitasPage.totalPages" />
+                                <q-pagination @click="listar" v-model="page" :max="receitaStore.receitasPage.totalPages"
+                                    :max-pages="6" :boundary-numbers="false" gutter="sm" />
                             </div>
                         </q-td>
                     </q-tr>
@@ -119,7 +119,7 @@
             </q-table>
         </div>
 
-        <div class="row justify-center">
+        <div class="row justify-start">
             <div class="col q-my-md q-mr-sm">
                 <ReceitasTimeline />
             </div>
@@ -136,15 +136,19 @@
 </template>
 
 <script lang="ts">
+import { useQuasar } from 'quasar';
 import { columnsReceita } from 'src/model/columns';
 import { toRealSymbol } from 'src/model/currency-helper';
 import { formatDate } from 'src/model/date-helper';
+import { ErrorResponse } from 'src/model/error';
 import { FilterEhAno, FilterEhData, FilterEhMes, FilterEhTexto, FilterEhValor, FilterVazio, Params } from 'src/model/filtro-chain';
 import { Direction } from 'src/model/paginacao';
+import { Receita } from 'src/model/receita';
 import { useCategoriaStore } from 'src/stores/categoria-store';
 import { useContaStore } from 'src/stores/conta-store';
 import { useReceitaStore } from 'src/stores/receita-store';
 import { defineComponent, onMounted, ref } from 'vue'
+import useNotify from '../composable/useNotify';
 import ReceitasTimeline from './ReceitasTimeline.vue'
 
 export default defineComponent({
@@ -153,6 +157,8 @@ export default defineComponent({
         ReceitasTimeline
     },
     setup() {
+        const $q = useQuasar();
+        const { notifySuccess, notifyError } = useNotify();
         const loading = ref(false);
         const receitaStore = useReceitaStore()
         const contaStore = useContaStore()
@@ -191,11 +197,30 @@ export default defineComponent({
         const params = () => {
             return {
                 page: page.value - 1,
-                size: 5,
+                size: 10,
                 sort: `data,${Direction.DESC}`,
                 categoriaId: categoriaId.value,
                 contaId: contaId.value,
                 ...query
+            }
+        }
+        const excluir = (receita: Receita) => {
+            try {
+                loading.value = true
+                $q.dialog({
+                    title: "Confirme",
+                    message: `Você realmente quer excluir ${receita.descricao} valor ${toRealSymbol(receita.valor)}`,
+                    cancel: true,
+                    persistent: true,
+                }).onOk(async () => {
+                    await receitaStore.deletar(receita.id)
+                    notifySuccess("Excluido com sucesso!")
+                });
+            } catch (error) {
+                const err = error as ErrorResponse
+                notifyError(err.message);
+            } finally {
+                loading.value = false;
             }
         }
 
@@ -206,21 +231,22 @@ export default defineComponent({
         })
 
         return {
-            loading,
-            categoriaId,
-            contaId,
-            categoriaChange,
-            contaChange,
-            listar,
-            filterChange,
-            receitaStore,
-            categoriaStore,
-            contaStore,
             page,
             filter,
-            toReal: toRealSymbol,
+            listar,
+            excluir,
+            loading,
+            contaId,
             formatDate,
+            contaStore,
+            categoriaId,
+            contaChange,
+            receitaStore,
+            filterChange,
             columnsReceita,
+            categoriaStore,
+            categoriaChange,
+            toReal: toRealSymbol,
         }
     },
 })

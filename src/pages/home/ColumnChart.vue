@@ -1,8 +1,9 @@
 <template>
-    <apexchart type="bar" height="350" :options="chartOptions" :series="series"></apexchart>
+    <apexchart type="bar" :options="chartOptions" :series="series"></apexchart>
 </template>
 
 <script lang="ts">
+import { toReal } from 'src/model/currency-helper'
 import { computed, defineComponent } from 'vue'
 
 export default defineComponent({
@@ -18,32 +19,53 @@ export default defineComponent({
     },
     setup(props) {
         const series = computed(() => [{
+            name: 'Total',
             data: Object.values(props.data)
         }])
 
         const chartOptions = computed(() => {
             return {
                 chart: {
-                    height: 350,
                     type: 'bar'
                 },
                 plotOptions: {
                     bar: {
-                        columnWidth: '45%',
                         distributed: true,
+                        dataLabels: {
+                            position: 'top',
+                        },
                     }
                 },
                 dataLabels: {
-                    enabled: false
+                    enabled: true,
+                    offsetY: -20,
+                    style: {
+                        fontSize: '12px',
+                        colors: ["#304758"]
+                    },
+                    formatter: toReal,
+                },
+                tooltip: {
+                    enabled: true,
+                    y: {
+                        formatter: function (val: number) {
+                            return toReal(val)
+                        }
+                    }
                 },
                 legend: {
                     show: false
                 },
+                yaxis: {
+                    show: false,
+                },
                 xaxis: {
                     categories: Object.keys(props.data),
                     labels: {
+                        show: false,
+                        position: 'top',
                         style: {
-                            fontSize: '12px'
+                            fontSize: '9px'
                         }
                     }
                 }

@@ -51,6 +51,9 @@ export const useDespesaStore = defineStore("despesa", {
             return api
                 .get("despesas", { params })
                 .then(res => (this.despesas = res.data));
+        },
+        deletar(id: number) {
+            return api.delete(`despesas/${id}`);
         }
     }
 });

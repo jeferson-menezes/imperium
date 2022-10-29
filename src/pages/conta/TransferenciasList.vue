@@ -22,25 +22,25 @@
 
                         <q-item-section avatar>
                             <q-avatar>
-                                <q-icon :name="'mdi-'+item?.contaOrigemTipo?.icone"
+                                <q-icon :name="'mdi-' + item?.contaOrigemTipo?.icone"
                                     :color="item.contaOrigemTipo?.cor" />
                             </q-avatar>
                         </q-item-section>
 
                         <q-item-section>
                             <q-item-label>
-                                {{item.contaOrigemNome}}
-                                <q-icon :name="'mdi-swap-horizontal'" size="sm" /> {{item.contaDestinoNome}}
+                                {{ item.contaOrigemNome }}
+                                <q-icon :name="'mdi-swap-horizontal'" size="sm" /> {{ item.contaDestinoNome }}
                                 <q-chip outline square color="blue" text-color="white" :label="toReal(item.valor)" />
                             </q-item-label>
                             <q-item-label caption lines="1">
-                                {{item.descricao}} -
-                                {{formatDate(item.data, 'DD MMM YYYY')}} às {{item.hora}}
+                                {{ item.descricao }} -
+                                {{ formatDate(item.data, 'DD MMM YYYY') }} às {{ item.hora }}
                             </q-item-label>
                         </q-item-section>
 
                         <q-item-section side top>
-                            <q-icon :name="'mdi-' +item?.contaDestinoTipo?.icone"
+                            <q-icon :name="'mdi-' + item?.contaDestinoTipo?.icone"
                                 :color="item?.contaDestinoTipo?.cor" />
                         </q-item-section>
 
@@ -53,7 +53,8 @@
 
             <q-card-actions class="q-pb-md flex flex-center">
                 <q-pagination @click="listar" v-model="page"
-                    :max="transferenciaStore?.tranferenciasPage?.totalPages || 0" />
+                    :max="transferenciaStore?.tranferenciasPage?.totalPages || 0" :max-pages="6"
+                    :boundary-numbers="false" gutter="sm" />
             </q-card-actions>
 
         </q-card>
