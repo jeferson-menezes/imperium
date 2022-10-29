@@ -7,6 +7,7 @@ import useNotify from "../composable/useNotify";
 import { useRouter } from "vue-router";
 
 export default defineComponent({
+
     name: "LoginPage",
 
     setup() {
@@ -31,7 +32,6 @@ export default defineComponent({
 
         onMounted(() => {
             if (authStore.isLoggedIn) {
-                console.log("Onde");
                 router.push({ name: "home" });
             }
         });
@@ -46,27 +46,10 @@ export default defineComponent({
         <q-form class="row justify-center" @submit.prevent="login">
             <p class="text-h5 text-center col-12">Login</p>
             <div class="col-md-4 col-sm-6 col-xs-10">
-                <q-input
-                    label="Email"
-                    v-model="form.email"
-                    lazy-rules
-                    :rules="rules.email"
-                ></q-input>
-                <q-input
-                    label="Senha"
-                    v-model="form.senha"
-                    lazy-rules
-                    :rules="rules.senha"
-                ></q-input>
+                <q-input label="Email" v-model="form.email" lazy-rules :rules="rules.email"></q-input>
+                <q-input label="Senha" v-model="form.senha" lazy-rules :rules="rules.senha"></q-input>
                 <div class="full-width q-pt-md q-gutter-y-md">
-                    <q-btn
-                        label="Login"
-                        color="primary"
-                        class="full-width"
-                        type="submit"
-                        outline
-                        rounded
-                    ></q-btn>
+                    <q-btn label="Login" color="primary" class="full-width" type="submit" outline rounded></q-btn>
                 </div>
             </div>
         </q-form>

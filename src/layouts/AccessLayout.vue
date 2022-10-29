@@ -2,9 +2,7 @@
     <q-layout view="lHh Lpr lFf">
         <q-header elevated>
             <q-toolbar>
-                <q-toolbar-title> Toolbar </q-toolbar-title>
-                <q-btn flat round dense icon="apps" class="q-mr-xs" />
-                <q-btn flat round dense icon="more_vert" />
+                <q-toolbar-title> Imperium </q-toolbar-title>
             </q-toolbar>
         </q-header>
         <q-page-container>

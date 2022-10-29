@@ -116,7 +116,8 @@ export default defineComponent({
             hora: new Date().toLocaleTimeString().substring(0, 5),
             valor: 0,
             categoriaId: undefined,
-            contaId: undefined
+            contaId: undefined,
+            categoriaNome: ''
         })
 
         const isUpdate = computed(() => route.params.id);

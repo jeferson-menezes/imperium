@@ -5,7 +5,7 @@ export interface Despesa {
     hora: string;
     valor: number;
     contaNome?: string;
-    categoriaNome?: string;
+    categoriaNome: string;
     categoriaId?: number;
     contaId?: number;
 }

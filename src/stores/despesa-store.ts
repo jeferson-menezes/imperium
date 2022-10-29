@@ -1,8 +1,9 @@
 import currency from "currency.js";
-import { Despesa } from "./../model/despesa";
-import { Page, Pageable } from "./../model/paginacao";
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
+import { DonutChart } from "src/model/charts";
+import { Despesa } from "./../model/despesa";
+import { Page, Pageable } from "./../model/paginacao";
 
 export const useDespesaStore = defineStore("despesa", {
     state: () => ({
@@ -15,6 +16,16 @@ export const useDespesaStore = defineStore("despesa", {
         },
         somaDespesas(): currency {
             return this.despesas.reduce((a, c) => a.add(c.valor), currency(0));
+        },
+        agruparCategorias(): DonutChart {
+            return this.despesas.reduce((acc: DonutChart, curr) => {
+                acc[curr.categoriaNome] = acc[curr.categoriaNome] || 0;
+                acc[curr.categoriaNome] = acc[curr.categoriaNome] + curr.valor;
+                return acc;
+            }, {});
+        },
+        valores(): number[] {
+            return this.despesas.map(e => e.valor);
         }
     },
     actions: {
@@ -36,7 +47,7 @@ export const useDespesaStore = defineStore("despesa", {
                 .then(res => (this.despesasPage = res.data));
         },
 
-        listar(params?: any) {
+        listar(params?: { mes: string }) {
             return api
                 .get("despesas", { params })
                 .then(res => (this.despesas = res.data));

@@ -116,7 +116,8 @@ export default defineComponent({
             hora: new Date().toLocaleTimeString(),
             valor: 0,
             categoriaId: undefined,
-            contaId: undefined
+            contaId: undefined,
+            categoriaNome: ''
         })
 
         const isUpdate = computed(() => route.params.id);
@@ -127,7 +128,7 @@ export default defineComponent({
                 if (isUpdate.value) {
                     await receitaStore.atualizar(form.value.id, form.value)
                 } else {
-                    await receitaStore.adicionar(form.value)
+                    await receitaStore.adicionar(form.value as Receita)
                 }
                 notifySuccess(isUpdate.value ? "Atualizado" : "Cadastrado" + "com sucesso");
                 router.push({ name: "receitas" });

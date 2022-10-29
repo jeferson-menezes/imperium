@@ -1,8 +1,9 @@
 import currency from "currency.js";
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
-import { Receita } from "src/model/receita";
+import { DonutChart } from "./../model/charts";
 import { Page, Pageable } from "./../model/paginacao";
+import { Receita } from "./../model/receita";
 
 export const useReceitaStore = defineStore("receita", {
     state: () => ({
@@ -15,6 +16,16 @@ export const useReceitaStore = defineStore("receita", {
         },
         somaReceitas(): currency {
             return this.receitas.reduce((a, c) => a.add(c.valor), currency(0));
+        },
+        agruparCategorias(): DonutChart {
+            return this.receitas.reduce((acc: DonutChart, curr) => {
+                acc[curr.categoriaNome] = acc[curr.categoriaNome] || 0;
+                acc[curr.categoriaNome] = acc[curr.categoriaNome] + curr.valor;
+                return acc;
+            }, {});
+        },
+        valores(): number[] {
+            return this.receitas.map(e => e.valor);
         }
     },
     actions: {
@@ -35,7 +46,7 @@ export const useReceitaStore = defineStore("receita", {
                 .get("receitas/page", { params })
                 .then(res => (this.receitasPage = res.data));
         },
-        listar(params?: any) {
+        listar(params?: { mes: string }) {
             return api
                 .get("receitas", { params })
                 .then(res => (this.receitas = res.data));

@@ -1,8 +1,8 @@
 {
   "name": "imperium",
   "version": "0.0.1",
-  "description": "A Quasar Project",
-  "productName": "Quasar App",
+  "description": "Impereium finance",
+  "productName": "Imperium app",
   "author": "Jeferson Menezes <jmenezes54@gmail.com>",
   "private": true,
   "scripts": {

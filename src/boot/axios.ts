@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from "axios";
+  import axios, { AxiosInstance } from "axios";
 import { Notify } from "quasar";
 import { boot } from "quasar/wrappers";
 import { useAuthStore } from "src/stores/auth-store";
@@ -9,8 +9,16 @@ declare module "@vue/runtime-core" {
     }
 }
 
-const api = axios.create({ baseURL: "http://localhost:8081" });
-const colors = axios.create({ baseURL: "http://localhost:8082" });
+let baseURL = 'http://zionflame.ddns.net:9876';
+let baseURLColors = 'http://zionflame.ddns.net:9877'
+
+if (process.env.NODE_ENV === 'development') {
+  baseURL = 'http://localhost:8081'
+  baseURLColors = 'http://localhost:8082'
+}
+
+const api = axios.create({ baseURL });
+const colors = axios.create({ baseURL: baseURLColors });
 
 const setBearerToken = (token: string) => {
     api.defaults.headers.common.Authorization = `Bearer ${token}`;
