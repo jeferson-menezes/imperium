@@ -1,4 +1,4 @@
-  import axios, { AxiosInstance } from "axios";
+import axios, { AxiosInstance } from "axios";
 import { Notify } from "quasar";
 import { boot } from "quasar/wrappers";
 import { useAuthStore } from "src/stores/auth-store";
