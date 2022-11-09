@@ -8,7 +8,7 @@
 
                 <q-btn-dropdown flat color="white" icon="person">
                     <q-list>
-                        <q-item clickable :to="{ name: 'tipo-produto-list' }">
+                        <q-item clickable :to="{ name: 'categorias' }">
                             <q-item-section avatar>
                                 <q-avatar icon="mdi-cog" color="primary" text-color="white" />
                             </q-item-section>
@@ -63,12 +63,12 @@ const linksList = [
         icon: "mdi-bank",
         routerName: "contas",
     },
-    {
-        title: "Categorias",
-        caption: "configuração de categorias",
-        icon: "mdi-shape",
-        routerName: "categorias",
-    },
+    // {
+    //     title: "Categorias",
+    //     caption: "configuração de categorias",
+    //     icon: "mdi-shape",
+    //     routerName: "categorias",
+    // },
     {
         title: "Despesas",
         caption: "registro de despesas",

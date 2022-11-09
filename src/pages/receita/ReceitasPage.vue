@@ -120,7 +120,7 @@
         </div>
 
         <div class="row justify-start">
-            <div class="col q-my-md q-mr-sm">
+            <div class="col-sm-6 col-12 q-my-md q-mr-sm">
                 <ReceitasTimeline />
             </div>
             <div class="col q-my-md q-mr-sm">

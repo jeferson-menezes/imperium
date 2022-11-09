@@ -1,8 +1,8 @@
 <template>
     <q-page padding>
 
-        <div class="row column-xs q-gutter-md">
-            <div class="col col-xs-12 text-right">
+        <div class="row justify-end">
+            <div class="col-md-6 col-12 text-right">
                 <MonthPicker @change="listar" v-model="hoje">
                 </MonthPicker>
             </div>

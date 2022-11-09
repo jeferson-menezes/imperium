@@ -201,4 +201,55 @@ const columnsReceita: QTableColumn[] = [
     }
 ];
 
-export { columnsConta, columnsCategoria, columnsDespesa, columnsReceita };
+const columnsAtivo: QTableColumn[] = [
+    {
+        label: "",
+        name: "imagem",
+        align: "left",
+        field: "imagem",
+        sortable: false
+    },
+    {
+        label: "Código",
+        name: "codigo",
+        align: "left",
+        field: "codigo",
+        sortable: true
+    },
+    {
+        label: "Nome",
+        name: "nome",
+        align: "left",
+        field: "nome",
+        sortable: true
+    },
+    {
+        label: "Renda",
+        name: "renda",
+        align: "left",
+        field: "renda",
+        sortable: true
+    },
+    {
+        label: "Setor",
+        name: "setorNome",
+        align: "left",
+        field: "setorNome",
+        sortable: true
+    },
+    {
+        label: "Ações",
+        name: "acoes",
+        align: "center",
+        field: "acoes",
+        sortable: false
+    }
+];
+
+export {
+    columnsConta,
+    columnsCategoria,
+    columnsDespesa,
+    columnsReceita,
+    columnsAtivo
+};
