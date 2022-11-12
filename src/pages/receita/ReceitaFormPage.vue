@@ -149,12 +149,12 @@ export default defineComponent({
         })
 
         return {
-            loading,
             form,
-            formRef,
-            isUpdate,
             rules,
             submit,
+            formRef,
+            loading,
+            isUpdate,
             contaStore,
             categoriaStore
         }

@@ -3,13 +3,17 @@
         <q-img :src="imageData">
             <template v-slot:loading>
                 <div class="text-yellow">
-                    <q-spinner-ios />
-                    <div class="q-mt-md">Loading...</div>
+                    <q-spinner-ios size="xs" />
                 </div>
             </template>
         </q-img>
     </q-avatar>
-    <q-avatar v-else color="grey" text-color="white" icon="mdi-image-off" />
+    <q-circular-progress v-else show-value font-size="16px" class="text-red q-ma-md" :value="progress" size="50px"
+        :thickness="0.05" color="red" track-color="grey-3">
+        <q-avatar size="xl" color="grey" text-color="white">
+            <q-icon size="md" name="mdi-image-off" />
+        </q-avatar>
+    </q-circular-progress>
 </template>
 
 <script lang="ts">
@@ -29,20 +33,17 @@ export default defineComponent({
         const imageData = ref("")
         const loading = ref(false);
         const imagemStore = useImagemStore()
-
+        const progress = ref(0)
         onMounted(async () => {
-            console.log(props.imagemId);
-
             if (props.imagemId) {
-                console.log("cai");
-
-                const { data } = await imagemStore.download(props.imagemId)
-                console.log(data);
+                const data = await imagemStore.download(props.imagemId, (event) => {
+                    progress.value = Math.round(event.loaded * 100 / event.total);
+                })
                 imageData.value = window.URL.createObjectURL(new Blob([data]));
             }
         })
 
-        return { loading, imageData }
+        return { loading, imageData, progress }
     },
 })
 </script>

@@ -81,6 +81,12 @@ const linksList = [
         icon: "payments",
         routerName: "receitas",
     },
+    {
+        title: "Proventos",
+        caption: "proventos recebidos",
+        icon: "mdi-cash-plus",
+        routerName: "proventos",
+    },
 ];
 
 export default defineComponent({

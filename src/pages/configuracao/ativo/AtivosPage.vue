@@ -17,6 +17,12 @@
                     </q-td>
                 </template>
 
+                <template v-slot:body-cell-renda="props">
+                    <q-td :props="props">
+                        {{ rendaTexto(props.row.renda) }}
+                    </q-td>
+                </template>
+
                 <template v-slot:body-cell-acoes="props">
                     <q-td :props="props" class="q-gutter-x-sm">
 
@@ -51,12 +57,11 @@
 </template>
 
 <script>
-import { useQuasar } from "quasar";
+import AvatarImagem from 'src/components/AvatarImagem.vue';
+import { rendaTexto } from 'src/model/ativo';
 import { columnsAtivo } from "src/model/columns";
-import useNotify from "src/pages/composable/useNotify";
 import { useAtivoStore } from "src/stores/ativo-store";
 import { defineComponent, onMounted, ref } from "vue";
-import AvatarImagem from 'src/components/AvatarImagem.vue'
 
 export default defineComponent({
     name: "AtivosPage",
@@ -65,7 +70,7 @@ export default defineComponent({
         AvatarImagem
     },
     setup() {
-        const $q = useQuasar();
+        // const $q = useQuasar();
         const ativoStore = useAtivoStore()
         const loading = ref(false);
 
@@ -74,7 +79,7 @@ export default defineComponent({
         onMounted(() => ativoStore.listar())
 
         return {
-            columnsAtivo, ativoStore, loading
+            columnsAtivo, ativoStore, loading, rendaTexto: (v) => rendaTexto[v]
         };
     },
 });

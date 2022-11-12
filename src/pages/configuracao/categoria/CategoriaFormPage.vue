@@ -36,10 +36,10 @@
 import { Categoria, Natureza } from 'src/model/categoria'
 import { ErrorResponse } from 'src/model/error';
 import { required } from 'src/model/rules';
+import useNotify from 'src/pages/composable/useNotify';
 import { useCategoriaStore } from 'src/stores/categoria-store';
 import { computed, defineComponent, ref, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
-import useNotify from '../composable/useNotify';
 import ColorsPicker from "./ColorsPicker.vue";
 import IconsPicker from './IconsPicker.vue'
 

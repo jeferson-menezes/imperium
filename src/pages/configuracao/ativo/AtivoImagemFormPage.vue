@@ -10,23 +10,18 @@
             </div>
 
             <q-form class="col-md-6 col-sm-10 col-xs-12 q-gutter-y-md" ref="formRef" @submit.prevent="submit">
-                <q-file v-model="image" label="Imagem" accept="image/*" :readonly="!!form.imagemId">
+
+                <q-file v-model="image" label="Imagem" accept="image/*">
                     <template v-slot:before v-if="form.imagemId">
                         <AvatarImagem :imagemId="form.imagemId" />
                     </template>
                     <template v-slot:append>
                         <q-icon name="attach_file" />
                     </template>
-                    <!-- <template v-slot:after v-if="form.image_url">
-                                        <q-btn round dense flat type="button" icon="delete" @click.stop.prevent="
-                                            handleRemoveImage(form.image_url)
-                                        ">
-                                            <q-tooltip> Deletar </q-tooltip>
-                                        </q-btn>
-                                    </template> -->
                 </q-file>
 
-                <q-btn label="Atualizar" color="primary" class="full-width" type="submit" outline rounded />
+                <q-btn :loading="loading" label="Atualizar" color="primary" class="full-width" type="submit" outline
+                    rounded />
 
                 <q-btn label="Cancel" class="full-width" color="primary" type="button" rounded flat
                     :to="{ name: 'ativos' }" />
@@ -45,10 +40,13 @@ import { useAtivoStore } from 'src/stores/ativo-store';
 import { useImagemStore } from 'src/stores/imagem-store';
 import { computed, defineComponent, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router';
+import AvatarImagem from 'src/components/AvatarImagem.vue'
 
 export default defineComponent({
 
     name: 'AtivoImagemFormPage',
+
+    components: { AvatarImagem },
 
     setup() {
         const route = useRoute();
@@ -68,6 +66,7 @@ export default defineComponent({
 
         const submit = async () => {
             try {
+                loading.value = true
                 const file = image.value as File
                 const res = await uploadImagem(file)
                 imagem = res.data

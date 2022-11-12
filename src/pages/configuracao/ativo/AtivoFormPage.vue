@@ -18,8 +18,8 @@
                 <q-select map-options emit-value option-value="id" option-label="nome" v-model="form.setorId"
                     :options="setorStore.setores" :rules="rules.setorId" label="Setor" />
 
-                <q-radio keep-color v-model="form.renda" val="RENDA_FIXA" label="Renda fixa" color="orange" />
-                <q-radio keep-color v-model="form.renda" val="RENDA_VARIAVEL" label="Renda variável" color="accent" />
+                <q-select map-options emit-value option-value="id" option-label="nome" v-model="form.tipoAtivoId"
+                    :options="ativoStore.tiposAtivos" :rules="rules.tipoAtivoId" label="Tipo" />
 
                 <q-btn :label="isUpdate ? 'Atualizar' : 'Cadastrar'" color="primary" class="full-width" type="submit"
                     outline rounded />
@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import { Ativo, Renda } from "src/model/ativo";
+import { Ativo } from "src/model/ativo";
 import { ErrorResponse } from "src/model/error";
 import { clone } from "src/model/objeto-helper";
 import { required } from "src/model/rules";
@@ -61,8 +61,8 @@ export default defineComponent({
             id: 0,
             nome: '',
             codigo: '',
-            renda: Renda.RENDA_FIXA,
-            setorId: undefined
+            setorId: undefined,
+            tipoAtivoId: undefined
         }
 
         const form = ref<Ativo>(clone(model));
@@ -70,7 +70,8 @@ export default defineComponent({
         const rules = {
             nome: [required("O nome é obrigatóro!")],
             codigo: [required("O código é obrigatório!")],
-            setorId: [required("O setor é obrigatório!")]
+            setorId: [required("O setor é obrigatório!")],
+            tipoAtivoId: [required("O Tipo é obrigatório!")]
         }
 
         const isUpdate = computed(() => route.params.id);
@@ -97,6 +98,7 @@ export default defineComponent({
 
         onMounted(async () => {
             setorStore.listar()
+            ativoStore.listarTipo()
             if (isUpdate.value) {
                 form.value = await ativoStore.detalhar(isUpdate.value as string)
             }
@@ -108,6 +110,7 @@ export default defineComponent({
             submit,
             isUpdate,
             setorStore,
+            ativoStore,
         };
     },
 });

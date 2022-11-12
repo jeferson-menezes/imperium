@@ -9,10 +9,10 @@
             <q-form ref="formRef" class="col-md-6 col-sm-10 col-xs-12 q-gutter-y-md" @submit.prevent="submit">
                 <q-input label="Nome" v-model="form.nome" lazy-rules :rules="rules.nome"></q-input>
 
-                <q-btn :label="isUpdate ? 'Atualizar' : 'Cadastrar'" color="primary" class="full-width" type="submit"
-                    outline rounded></q-btn>
+                <q-btn :loading="loading" :label="isUpdate ? 'Atualizar' : 'Cadastrar'" color="primary"
+                    class="full-width" type="submit" outline rounded></q-btn>
 
-                <q-btn :loading="loading" label="Cancel" class="full-width" color="primary" type="button" rounded flat
+                <q-btn label="Cancel" class="full-width" color="primary" type="button" rounded flat
                     :to="{ name: 'setores' }" />
             </q-form>
         </div>

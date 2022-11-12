@@ -224,10 +224,10 @@ const columnsAtivo: QTableColumn[] = [
         sortable: true
     },
     {
-        label: "Renda",
-        name: "renda",
+        label: "Tipo",
+        name: "tipoAtivoNome",
         align: "left",
-        field: "renda",
+        field: "tipoAtivoNome",
         sortable: true
     },
     {
@@ -246,10 +246,21 @@ const columnsAtivo: QTableColumn[] = [
     }
 ];
 
+const columnsProvento: QTableColumn[] = [
+    {
+        label: "Ações",
+        name: "acoes",
+        align: "center",
+        field: "acoes",
+        sortable: false
+    }
+];
+
 export {
     columnsConta,
-    columnsCategoria,
-    columnsDespesa,
+    columnsAtivo,
     columnsReceita,
-    columnsAtivo
+    columnsDespesa,
+    columnsProvento,
+    columnsCategoria
 };

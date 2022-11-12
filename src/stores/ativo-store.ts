@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
 import { api } from "src/boot/axios";
-import { Ativo } from "src/model/ativo";
+import { Ativo, TipoAtivo } from "src/model/ativo";
 
 export const useAtivoStore = defineStore("ativo", {
     state: () => ({
-        ativos: [] as Ativo[] | []
+        ativos: [] as Ativo[] | [],
+        tiposAtivos: [] as TipoAtivo[] | []
     }),
     getters: {},
     actions: {
@@ -21,7 +22,11 @@ export const useAtivoStore = defineStore("ativo", {
         listar() {
             return api.get("ativos").then(res => (this.ativos = res.data));
         },
-
+        listarTipo() {
+            return api
+                .get("ativos/tipos")
+                .then(res => (this.tiposAtivos = res.data));
+        },
         detalhar(id: string | number) {
             return api.get<Ativo>(`ativos/${id}`).then(res => res.data);
         }
