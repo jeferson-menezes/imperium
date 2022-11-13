@@ -1,5 +1,6 @@
 <template>
-    <q-input label="Valor" v-model="money" prefix="R$" mask="#,##" fill-mask="0" lazy-rules reverse-fill-mask></q-input>
+    <q-input @blur="$emit('inputValue')" label="Valor" v-model="money" prefix="R$" mask="#,##" fill-mask="0" lazy-rules
+        reverse-fill-mask></q-input>
 </template>
 <script lang="ts">
 import { toDolar, toReal } from 'src/model/currency-helper'
@@ -25,7 +26,6 @@ export default defineComponent({
             get: () => toReal(props.modelValue),
             set: (value) => emit('update:modelValue', toDolar(value))
         })
-
         return { money }
     },
 })

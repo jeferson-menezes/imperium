@@ -3,7 +3,7 @@ export enum Renda {
     RENDA_VARIAVEL = "RENDA_VARIAVEL"
 }
 
-export const rendaTexto = {
+export const rendaTexto: { [key: string]: string } = {
     RENDA_FIXA: "Renda fixa",
     RENDA_VARIAVEL: "Renda Variável"
 };

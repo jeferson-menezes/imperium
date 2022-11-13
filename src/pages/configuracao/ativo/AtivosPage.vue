@@ -56,7 +56,7 @@
     </q-page>
 </template>
 
-<script>
+<script lang="ts">
 import AvatarImagem from 'src/components/AvatarImagem.vue';
 import { rendaTexto } from 'src/model/ativo';
 import { columnsAtivo } from "src/model/columns";
@@ -79,7 +79,10 @@ export default defineComponent({
         onMounted(() => ativoStore.listar())
 
         return {
-            columnsAtivo, ativoStore, loading, rendaTexto: (v) => rendaTexto[v]
+            columnsAtivo,
+            ativoStore,
+            loading,
+            rendaTexto: (v: string) => rendaTexto[v]
         };
     },
 });
