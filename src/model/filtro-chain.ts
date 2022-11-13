@@ -8,6 +8,7 @@ export interface Params {
     data?: string;
     descricao?: string;
 }
+
 export abstract class FilterPattern {
     // eslint-disable-next-line no-use-before-define
     proximo: FilterPattern;

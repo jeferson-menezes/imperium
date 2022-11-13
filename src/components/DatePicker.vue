@@ -1,5 +1,5 @@
 <template>
-    <q-input v-model="date" :readonly="true">
+    <q-input :label="label" v-model="date" :readonly="true">
         <template v-slot:append>
             <q-icon name="event" class="cursor-pointer">
                 <q-popup-proxy cover transition-show="scale" transition-hide="scale">
@@ -22,7 +22,13 @@ export default defineComponent({
 
     name: 'DatePicker',
 
-    props: { modelValue: String },
+    props: {
+        modelValue: String,
+        label: {
+            type: String,
+            default: 'Data'
+        }
+    },
 
     setup(props, { emit }) {
         const date = computed({

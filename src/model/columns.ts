@@ -248,6 +248,62 @@ const columnsAtivo: QTableColumn[] = [
 
 const columnsProvento: QTableColumn[] = [
     {
+        label: "ativoCodigo",
+        name: "ativoCodigo",
+        align: "center",
+        field: "ativoCodigo",
+        sortable: false
+    },
+    {
+        label: "ativoNome",
+        name: "ativoNome",
+        align: "center",
+        field: "ativoNome",
+        sortable: false
+    },
+    {
+        label: "precoUnitario",
+        name: "precoUnitario",
+        align: "center",
+        field: "precoUnitario",
+        sortable: false
+    },
+    {
+        label: "precoUnitario",
+        name: "precoUnitario",
+        align: "center",
+        field: "precoUnitario",
+        sortable: false
+    },
+    {
+        label: "valorLiquido",
+        name: "valorLiquido",
+        align: "center",
+        field: "valorLiquido",
+        sortable: false
+    },
+    {
+        label: "quantidade",
+        name: "quantidade",
+        align: "center",
+        field: "quantidade",
+        sortable: false
+    },
+    {
+        label: "pagoEm",
+        name: "pagoEm",
+        align: "center",
+        field: "pagoEm",
+        sortable: false
+    },
+    {
+        label: "evento",
+        name: "evento",
+        align: "center",
+        field: "evento",
+        sortable: false
+    },
+    {
         label: "Ações",
         name: "acoes",
         align: "center",

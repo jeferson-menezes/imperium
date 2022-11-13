@@ -27,11 +27,6 @@ export const useProventoStore = defineStore("provento", {
                 .get("proventos/page", { params })
                 .then(res => (this.proventosPage = res.data));
         },
-        listar(params?: { mes: string }) {
-            return api
-                .get("proventos", { params })
-                .then(res => (this.proventosPage = res.data));
-        },
         deletar(id: number) {
             return api.delete(`proventos/${id}`);
         }

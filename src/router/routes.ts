@@ -63,6 +63,11 @@ const routes: RouteRecordRaw[] = [
                 component: () => import("pages/provento/ProventosPage.vue")
             },
             {
+                path: "provento/form/:id?",
+                name: "provento-form",
+                component: () => import("pages/provento/ProventoFormPage.vue")
+            },
+            {
                 path: "configuracao",
                 name: "configuracao",
                 component: () =>
