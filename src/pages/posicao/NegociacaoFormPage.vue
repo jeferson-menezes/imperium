@@ -1,44 +1,26 @@
 <template>
     <q-page padding>
         <div class="row justify-center">
+
             <div class="col-12 text-center">
                 <p class="text-h6">
-                    {{ isUpdate ? "Atualizar" : "Cadastrar" }} provento
+                    {{ isUpdate ? "Atualizar" : "Cadastrar" }} negociação
                 </p>
             </div>
 
-            <q-form class="col-md-6 col-sm-10 col-xs-12 q-gutter-y-md" ref="formRef" @submit.prevent="submit">
+            <q-form class="col-md-6 col-sm-10 col-xs-11 q-gutter-y-md" ref="formRef" @submit.prevent="submit">
+
+                <q-radio keep-color v-model="form.movimentacao" val="COMPRA" label="COMPRA" color="red" />
+                <q-radio keep-color v-model="form.movimentacao" val="VENDA" label="VENDA" color="green" />
 
                 <q-input @blur="calcularLiquido" type="number" label="Quantidade" v-model="form.quantidade" lazy-rules
                     :rules="rules.quantidade"></q-input>
 
-                <MoneyField @blur="calcularLiquido" label="Valor" v-model="form.precoUnitario" />
+                <MoneyField @blur="calcularLiquido" label="Preço" v-model="form.preco" />
 
-                <MoneyField label="Valor" v-model="form.valorLiquido" />
+                <MoneyField label="Total" v-model="form.valorTotal" />
 
-                <div class="row justify-between  content-start">
-                    <div class="col q-mr-sm">
-                        <DatePicker v-model="form.pagoEm" />
-                    </div>
-                    <div class="col q-ml-sm">
-                        <DatePicker v-model="form.aprovadoEm" />
-                    </div>
-                </div>
-
-                <q-select label="Evento" emit-value v-model="form.evento" :options="eventos" :rules="rules.evento">
-                    <template v-slot:selected-item="scope">
-                        {{ eventoTexto(scope.opt) }}
-                    </template>
-                    <template v-slot:option="scope">
-                        <q-item v-bind="scope.itemProps">
-                            <q-item-section>
-                                <q-item-label>
-                                    {{ eventoTexto(scope.opt) }}
-                                </q-item-label>
-                            </q-item-section>
-                        </q-item>
-                    </template>
-                </q-select>
+                <DatePicker v-model="form.data" />
 
                 <q-select v-model="form.ativoId" label="Ativo" option-value="id" option-label="nome" map-options
                     emit-value clearable use-input hide-selected fill-input input-debounce="0" :options="ativosOptions"
@@ -68,7 +50,7 @@
                     class="full-width" type="submit" outline rounded></q-btn>
 
                 <q-btn label="Cancelar" class="full-width" color="primary" type="button" rounded flat
-                    :to="{ name: 'proventos' }" />
+                    :to="{ name: 'posicoes' }" />
 
             </q-form>
 
@@ -77,45 +59,49 @@
 </template>
 
 <script lang="ts">
-
 import currency from "currency.js";
 import DatePicker from 'src/components/DatePicker.vue';
 import MoneyField from 'src/components/MoneyField.vue';
-import { ErrorResponse } from "src/model/error";
+import { ErrorResponse } from 'src/model/error';
 import { clone } from 'src/model/objeto-helper';
-import { Evento, eventoTexto, proventoBase, proventoRules } from 'src/model/provento';
+import { negociacaoBase, negociacaoRules } from 'src/model/posicao';
 import { useAtivoStore } from 'src/stores/ativo-store';
-import { useProventoStore } from 'src/stores/provento-store';
+import { useNegociacaoStore } from 'src/stores/negociacao-store';
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import useNotify from "../composable/useNotify";
+import useNotify from '../composable/useNotify';
 
 export default defineComponent({
-    name: 'ProventoFormPage',
-    components: { DatePicker, MoneyField },
+
+    name: 'NegociacaoFormPage',
+
+    components: {
+        DatePicker,
+        MoneyField
+    },
+
     setup() {
-        const route = useRoute()
-        const router = useRouter()
-        const proventoStore = useProventoStore()
+        const route = useRoute();
+        const router = useRouter();
+        const negociacaoStore = useNegociacaoStore()
         const ativoStore = useAtivoStore()
         const { notifyError, notifySuccess } = useNotify();
 
-        const loading = ref(false);
         const ativosOptions = ref(ativoStore.ativos)
-        const form = ref(clone(proventoBase))
+        const loading = ref(false);
+        const form = ref(clone(negociacaoBase))
         const isUpdate = computed(() => route.params.id);
 
         const submit = async () => {
             try {
                 loading.value = true
-
                 if (isUpdate.value) {
-                    await proventoStore.atualizar(form.value.id, form.value);
+                    await negociacaoStore.atualizar(form.value.id, form.value);
                     notifySuccess('Atualizado com sucesso!')
-                    router.push({ name: "proventos" });
+                    router.push({ name: "ativos" });
                 } else {
-                    await proventoStore.adicionar(form.value)
-                    form.value = clone(proventoBase)
+                    await negociacaoStore.adicionar(form.value)
+                    form.value = clone(negociacaoBase)
                     notifySuccess('Adicionado com sucesso!')
                 }
             } catch (error) {
@@ -148,13 +134,13 @@ export default defineComponent({
         }
 
         const calcularLiquido = () => {
-            form.value.valorLiquido = currency(form.value.precoUnitario).multiply(form.value.quantidade)
+            form.value.valorTotal = currency(form.value.preco).multiply(form.value.quantidade)
         }
 
         onMounted(async () => {
             ativoStore.listar()
             if (isUpdate.value) {
-                form.value = await proventoStore.detalhar(isUpdate.value as string)
+                negociacaoStore.detalhar(isUpdate.value as string)
             }
         })
 
@@ -162,14 +148,11 @@ export default defineComponent({
             form,
             submit,
             loading,
-            filterFn,
             isUpdate,
-            ativoStore,
+            filterFn,
             ativosOptions,
             calcularLiquido,
-            rules: proventoRules,
-            eventos: Object.keys(Evento),
-            eventoTexto: (v: string) => eventoTexto[v]
+            rules: negociacaoRules
         }
     },
 })

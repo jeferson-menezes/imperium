@@ -5,6 +5,7 @@ import { useAuthStore } from "src/stores/auth-store";
 import { email, required } from "src/model/rules";
 import useNotify from "../composable/useNotify";
 import { useRouter } from "vue-router";
+import { baseURL } from "src/boot/axios";
 
 export default defineComponent({
 
@@ -36,7 +37,7 @@ export default defineComponent({
             }
         });
 
-        return { form, rules, login };
+        return { form, rules, login, baseURL };
     },
 });
 </script>
@@ -50,6 +51,9 @@ export default defineComponent({
                 <q-input type="password" label="Senha" v-model="form.senha" lazy-rules :rules="rules.senha"></q-input>
                 <div class="full-width q-pt-md q-gutter-y-md">
                     <q-btn label="Login" color="primary" class="full-width" type="submit" outline rounded></q-btn>
+
+                    <q-btn label="Ativar link" class="full-width" color="primary" type="button" rounded flat
+                        :href="baseURL" target="_blank" />
                 </div>
             </div>
         </q-form>

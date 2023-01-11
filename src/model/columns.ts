@@ -298,11 +298,63 @@ const columnsProvento: QTableColumn[] = [
     }
 ];
 
+const columnsPosicao: QTableColumn[] = [
+    {
+        label: "",
+        name: "imagem",
+        align: "left",
+        field: "imagem",
+        sortable: false
+    },
+    {
+        label: "Ativo",
+        name: "ativoCodigo",
+        align: "left",
+        field: "ativoCodigo",
+        sortable: false
+    },
+    {
+        label: "Tipo",
+        name: "ativoTipoAtivoNome",
+        align: "left",
+        field: "ativoTipoAtivoNome",
+        sortable: false
+    },
+    {
+        label: "Quantidade",
+        name: "quantidade",
+        align: "left",
+        field: "quantidade",
+        sortable: false
+    },
+    {
+        label: "Custo Médio",
+        name: "custoMedio",
+        align: "left",
+        field: "custoMedio",
+        sortable: false
+    },
+    {
+        label: "Valor Total",
+        name: "valorTotal",
+        align: "left",
+        field: "valorTotal",
+        sortable: false
+    },
+    {
+        label: "Ações",
+        name: "acoes",
+        align: "center",
+        field: "acoes",
+        sortable: false
+    }
+];
 export {
     columnsConta,
     columnsAtivo,
     columnsReceita,
     columnsDespesa,
     columnsProvento,
-    columnsCategoria
+    columnsCategoria,
+    columnsPosicao
 };

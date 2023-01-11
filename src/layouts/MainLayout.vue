@@ -87,6 +87,12 @@ const linksList = [
         icon: "mdi-cash-plus",
         routerName: "proventos",
     },
+    {
+        title: "Posições",
+        caption: "carteira de ativos",
+        icon: "mdi-wallet",
+        routerName: "posicoes",
+    },
 ];
 
 export default defineComponent({
